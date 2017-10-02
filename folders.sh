@@ -21,3 +21,5 @@ chmod 755 ./modules/${module}/spec
 chmod 755 ./modules/${module}/functions
 chmod 755 ./modules/${module}/types
 
+# note: try the command 'puppet module generate'
+
