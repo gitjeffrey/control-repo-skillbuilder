@@ -44,5 +44,9 @@
 #
 class gitver {
 
+  exec { 'git_version':
+    command => 'git --version',
+    path    => '/usr/bin',
+  }
 
 }
