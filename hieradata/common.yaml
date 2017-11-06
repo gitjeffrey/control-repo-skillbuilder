@@ -2,6 +2,14 @@
 profile::hiera_test::ssl: true
 
 # profile::apache::vhosts: {}
+
+# puppetlabs-mysql dependencies:
+# puppetlabs/translate (>= 1.0.0 < 2.0.0)
+# puppetlabs/stdlib (>= 3.2.0 < 5.0.0)
+# puppet/staging
+
+# note: by default SELinux only allows these ports:
+# 80, 81, 443, 488, 8008, 8009, 8443, 9000
 profile::apache::vhosts:
   www1.autostructure.io:
       vhost_name: www1.autostructure.io
@@ -13,3 +21,21 @@ profile::apache::vhosts:
       port:       '8009'
       docroot:    /opt/www2
       ip:         '127.0.0.1'
+
+profile::mysql::server:
+  db.autostructure.io:
+      remove_default_accounts: true
+      override_options:        undef
+      root_password:           'strongpassword'
+
+profile::mysql::db:
+  db1.autostructure.io:
+      user:  dbuser1
+      pass:  eyaml
+      host:  localhost
+      grant: "['SELECT'],['UPDATE']"
+  db2.autostructure.io:
+      user:  dbuser2
+      pass:  eyaml
+      host:  localhost
+      grant: "['SELECT'],['UPDATE']"
