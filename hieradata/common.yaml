@@ -1,1 +1,13 @@
+---
 profile::hiera_test::ssl: true
+
+# profile::apache::vhosts: {}
+profile::apache::vhosts:
+  www1.autostructure.io:
+      vhost_name: www1.autostructure.io
+      port:       8081
+      docroot:    /opt/www1
+  www2.autostructure.io:
+      vhost_name: www2.autostructure.io
+      port:       8082
+      docroot:    /opt/www2

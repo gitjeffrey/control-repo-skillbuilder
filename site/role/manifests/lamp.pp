@@ -1,7 +1,7 @@
 class role::lamp {
   include profile::apache
-  include profile::mysql
+  #include profile::mysql
 
-  Class['::profile::apache']
-  -> Class['::profile::mysql']
+#  Class['::profile::apache']
+#  -> Class['::profile::mysql']
 }
