@@ -7,7 +7,7 @@ class profile::apache (
 
   $vhosts.each | String $key, Hash $value| {
 
-    ::apache::vhosts { $key:
+    ::apache::vhost { $key:
       docroot    => $value['docroot'],
       port       => $value['port'],
       vhost_name => $value['vhost_name'],
