@@ -5,11 +5,11 @@ profile::hiera_test::ssl: true
 profile::apache::vhosts:
   www1.autostructure.io:
       vhost_name: www1.autostructure.io
-      port:       '8081'
+      port:       '8008'
       docroot:    /opt/www1
-      ip:         192.168.0.113
+      ip:         '192.168.0.113'
   www2.autostructure.io:
       vhost_name: www2.autostructure.io
-      port:       '8082'
+      port:       '8009'
       docroot:    /opt/www2
-      ip:         192.168.0.113
+      ip:         '127.0.0.1'
