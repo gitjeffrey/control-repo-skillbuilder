@@ -1,9 +1,9 @@
 class profile::apache (
   Hash $vhosts,
 ) {
-  class { '::apache': }
+  class { '::puppetlabs::apache': }
 
-  contain ::apache
+  contain ::puppetlabs::apache
 
   create_resources('::apache::vhost', $vhosts)
 
