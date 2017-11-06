@@ -7,7 +7,9 @@ profile::apache::vhosts:
       vhost_name: www1.autostructure.io
       port:       '8081'
       docroot:    /opt/www1
+      ip:         192.168.0.113
   www2.autostructure.io:
       vhost_name: www2.autostructure.io
       port:       '8082'
       docroot:    /opt/www2
+      ip:         192.168.0.113

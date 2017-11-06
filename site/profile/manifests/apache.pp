@@ -13,6 +13,7 @@ class profile::apache (
       docroot    => $value['docroot'],
       port       => $value['port'],
       vhost_name => $value['vhost_name'],
+      ip         => $value['ip'],
     }
   }
 }
