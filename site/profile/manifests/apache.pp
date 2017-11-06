@@ -1,10 +1,14 @@
 class profile::apache (
   Hash $vhosts,
 ) {
-  class { 'apache': }
+  class { '::apache': }
 
-  contain apache
+  #create_resources('::apache::vhost', $vhosts)
 
-  create_resources('::apache::vhost', $vhosts)
+  $vhosts.each | String $key, Hash $value| {
 
+    ::apache::vhost { $key:
+      docroot => $value['docroot'],
+    }
+  }
 }
