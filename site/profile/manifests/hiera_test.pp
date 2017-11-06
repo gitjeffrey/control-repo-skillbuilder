@@ -2,7 +2,7 @@
 class profile::hiera_test (
   Boolean             $ssl,
 ) {
-  file { '~/hiera_test.txt':
+  file { '/tmp/hiera_test.txt':
     ensure  => file,
     content => @("END"),
                Data from profile::hiera_test
