@@ -1,13 +1,10 @@
 # Class for installing mysql
 
 class profile::mysql (
-  String $root_password,
-  Boolean $remove_default_accounts,
-  Hash $override_options,
   Hash $databases,
 ) {
 
-include ::mysql::server
+  include ::mysql::server
 
   $databases.each | String $key, Hash $value| {
 
