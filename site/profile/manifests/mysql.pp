@@ -3,7 +3,7 @@ class profile::mysql {
   Boolean $remove_default_accounts,
   Hash $override_options,
   Hash $databases,
-) {_
+) {
 
   class { '::mysql::server':
     root_password           => $value['root_password'],          # 'strongpassword',
