@@ -1,4 +1,4 @@
-class profile::mysql { (
+class profile::mysql (
   String $root_password,
   Boolean $remove_default_accounts,
   Hash $override_options,
