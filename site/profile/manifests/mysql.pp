@@ -6,14 +6,14 @@ class profile::mysql {
 ) {_
 
   class { '::mysql::server':
-    root_password           => $value['root_password'],      # 'strongpassword',
-    remove_default_accounts => $value['remove_default_accounts']    # true,
+    root_password           => $value['root_password'],          # 'strongpassword',
+    remove_default_accounts => $value['remove_default_accounts'] # true,
     override_options        => $override_options
   }
 
   $databases.each | String $key, Hash $value| {
 
-    notify {"{PROGRAMMER_MSG}::mysql::vhost \$key=${key}, \$value=${value}":}
+    notify {"{PROGRAMMER_MSG}::mysql::db \$key=${key}, \$value=${value}":}
 
     mysql::db { $key:
       user     => $value['user'],

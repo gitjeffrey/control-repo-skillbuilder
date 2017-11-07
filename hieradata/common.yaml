@@ -33,9 +33,13 @@ profile::mysql::db:
       user:  dbuser1
       pass:  eyaml
       host:  localhost
-      grant: "['SELECT'],['UPDATE']"
+      grant:
+        - SELECT
+        - UPDATE
   db2.autostructure.io:
       user:  dbuser2
       pass:  eyaml
       host:  localhost
-      grant: "['SELECT'],['UPDATE']"
+      grant:
+        - SELECT
+        - UPDATE
