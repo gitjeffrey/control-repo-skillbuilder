@@ -22,13 +22,11 @@ profile::apache::vhosts:
       docroot:    /opt/www2
       ip:         '127.0.0.1'
 
-profile::mysql::server:
-  db.autostructure.io:
-      remove_default_accounts: true
-      override_options:        undef
-      root_password:           'strongpassword'
+profile::mysql::remove_default_accounts: true
+profile::mysql::override_options:        undef
+profile::mysql::root_password:           'strongpassword'
 
-profile::mysql::db:
+profile::mysql::databases:
   db1.autostructure.io:
       user:  dbuser1
       pass:  eyaml

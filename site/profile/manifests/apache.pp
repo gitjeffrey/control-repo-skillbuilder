@@ -1,3 +1,5 @@
+# Class to create a webserver.
+
 class profile::apache (
   Hash $vhosts,
 ) {

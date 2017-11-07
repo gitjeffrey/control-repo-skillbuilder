@@ -1,3 +1,5 @@
+# Class for installing mysql
+
 class profile::mysql (
   String $root_password,
   Boolean $remove_default_accounts,
