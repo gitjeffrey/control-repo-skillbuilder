@@ -1,0 +1,51 @@
+---
+profile::hiera_test::ssl: true
+
+# profile::apache::vhosts: {}
+# note: by default SELinux only allows these ports:
+# 80, 81, 443, 488, 8008, 8009, 8443, 9000
+profile::apache::vhosts:
+  www1.autostructure.io:
+      vhost_name: www1.autostructure.io
+      port:       '8008'
+      docroot:    /opt/www1
+      ip:         '192.168.0.113'
+  www2.autostructure.io:
+      vhost_name: www2.autostructure.io
+      port:       '8009'
+      docroot:    /opt/www2
+      ip:         '127.0.0.1'
+
+profile::mysql::databases:
+  db1.autostructure.io:
+      user: dbuser1
+      pass: >
+        ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEw
+        DQYJKoZIhvcNAQEBBQAEggEAeZQckhI5/X9EaY1UG6/4ydRLsBLqILIrQWyT
+        NO2TOrv5Don9D8POBQIkunMLSspwHnto+cLD+hHX3wUfbmb1BeNgLjYhlGqf
+        HJCWlEn/h0J8mme+t0fahKVBbD8I0T4qOjxzSHwr14aB0sRRg5Kja3krZG5D
+        Wuw8HZtz2Tunv9xbDwEIDQ47X5NXOJauAzVzQb6rbF8LyidG4exWQaCAqFFx
+        jx1a7ci58xtjV5EtHp5qNPHo8lxn/hL/7ocn9Gj7k+vCRR66/L7Vzlv3RCR/
+        wTuJ7AHX85WG3ZQNnuY4m19E3rxFh8s+mzLLIWj/As4pLUaRJTxb8tAZ6amp
+        0t+z3zA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBB+mF+6KjgMmbmeMHLU
+        Wo7KgBAaKu8gbFgxahv4W4q8CKrb]
+      host: localhost
+      grant:
+        - SELECT
+        - UPDATE
+  db2.autostructure.io:
+      user:  dbuser2
+      pass: >
+        ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEw
+        DQYJKoZIhvcNAQEBBQAEggEAeZQckhI5/X9EaY1UG6/4ydRLsBLqILIrQWyT
+        NO2TOrv5Don9D8POBQIkunMLSspwHnto+cLD+hHX3wUfbmb1BeNgLjYhlGqf
+        HJCWlEn/h0J8mme+t0fahKVBbD8I0T4qOjxzSHwr14aB0sRRg5Kja3krZG5D
+        Wuw8HZtz2Tunv9xbDwEIDQ47X5NXOJauAzVzQb6rbF8LyidG4exWQaCAqFFx
+        jx1a7ci58xtjV5EtHp5qNPHo8lxn/hL/7ocn9Gj7k+vCRR66/L7Vzlv3RCR/
+        wTuJ7AHX85WG3ZQNnuY4m19E3rxFh8s+mzLLIWj/As4pLUaRJTxb8tAZ6amp
+        0t+z3zA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBB+mF+6KjgMmbmeMHLU
+        Wo7KgBAaKu8gbFgxahv4W4q8CKrb]
+      host:  localhost
+      grant:
+        - SELECT
+        - UPDATE

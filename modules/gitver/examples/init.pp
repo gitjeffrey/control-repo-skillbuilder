@@ -9,4 +9,19 @@
 # Learn more about module testing here:
 # https://docs.puppet.com/guides/tests_smoke.html
 #
+notify {'output_before':
+  message => 'gitver module called.',
+  before => Class['gitver'],
+}
+
+#notice('gitver module called...')
+
 include ::gitver
+
+#notice('gitver module completed.')
+
+notify {'output_after':
+  message => 'gitver module complete.',
+  require => Class['gitver'],
+}
+

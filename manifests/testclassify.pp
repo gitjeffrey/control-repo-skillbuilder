@@ -1,0 +1,5 @@
+class testclassify {
+
+  class { 'testclass': }
+
+}
