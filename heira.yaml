@@ -1,8 +1,22 @@
 ---
-:backends:
-  - yaml
-:yaml:
-  :datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
-:hierarchy:
-  - "nodes/%{::trusted.certname}"
-  - common
+# backends:
+#  - yaml
+# yaml:
+#   datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
+version: 5
+defaults:
+  datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
+hierarchy:
+  - name: "Secret data (encrypted)"
+    lookup_key: eyaml_lookup_key # eyaml backend
+    paths:
+      - "secrets/%{trusted.certname}.eyaml"  # Include explicit file extension
+      - "common.eyaml"
+    options:
+      pkcs7_private_key: /etc/puppetlabs/puppet/keys/private_key.pkcs7.pem
+      pkcs7_public_key:  /etc/puppetlabs/puppet/keys/public_key.pkcs7.pem
+  - name: "Normal data (unencrypted)"
+    data_hash: yaml_data # Standard yaml backend
+    paths:
+      - "%{trusted.certname}.yaml"
+      - "common.yaml"
