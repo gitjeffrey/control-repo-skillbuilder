@@ -8,4 +8,11 @@ class profile::windows (
     password => 'puppet',
   }
 
+  file { 'c:/tmp/':
+    ensure => 'directory',
+    path   => 'c:/tmp/',
+    owner  => 'winpup',
+    group  => 'wingrp',
+  }
+
 }
