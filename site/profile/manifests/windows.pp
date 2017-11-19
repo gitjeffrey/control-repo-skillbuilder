@@ -3,6 +3,8 @@
 class profile::windows (
 ) {
 
+  notify {'profile::windows b4 user resource.':}
+
   user { 'winpup':
     ensure   => 'present',
     password => 'puppet',
