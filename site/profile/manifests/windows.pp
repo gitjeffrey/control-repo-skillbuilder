@@ -11,11 +11,8 @@ class profile::windows (
   }
 
   group { 'wingrp':
-    ensure => 'present',
-    name   => 'wingrp',
-  }
-
-  group { 'wingrp':
+    ensure          => 'present',
+    name            => 'wingrp',
     auth_membership => false,
     members         => 'winpup',
   }
