@@ -7,7 +7,7 @@ class profile::windows (
 
   user { 'winpup':
     ensure   => 'present',
-    password => 'puppet',
+    password => 'Puppet123.',
   }
 
   file { 'c:/tmp/':
