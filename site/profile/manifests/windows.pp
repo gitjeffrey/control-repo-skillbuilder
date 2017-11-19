@@ -10,6 +10,16 @@ class profile::windows (
     password => 'Puppet123.',
   }
 
+  group { 'wingrp':
+    ensure => 'present',
+    name   => 'wingrp',
+  }
+
+  group { 'wingrp':
+    auth_membership => false,
+    members         => 'winpup',
+  }
+
   file { 'c:/tmp/':
     ensure => 'directory',
     path   => 'c:/tmp/',
