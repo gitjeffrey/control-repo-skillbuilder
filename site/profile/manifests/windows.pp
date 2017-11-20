@@ -34,7 +34,7 @@ class profile::windows (
     extract_path => '/tmp',
     creates      => '/tmp/7z1701-x64.exe',
     cleanup      => false,
-    notify       => ::puppetlabs::Reboot['after'],
+    publish      => Reboot['after'],
   }
 
 
