@@ -24,7 +24,7 @@ class profile::windows (
     group  => 'wingrp',
   }
 
-  archive { '7-zip':
+  puppetlabs::archive { '7-zip':
     source       => 'http://www.7-zip.org/a/7z1701-x64.exe',
     extract      => true,
     extract_path => '/tmp',
@@ -33,7 +33,7 @@ class profile::windows (
     notify       => Reboot['after'],
   }
 
-  reboot { 'after':
+  puppetlabs::reboot { 'after':
     apply => finished,
   }
 
