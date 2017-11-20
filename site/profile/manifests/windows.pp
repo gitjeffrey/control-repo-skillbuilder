@@ -24,4 +24,22 @@ class profile::windows (
     group  => 'wingrp',
   }
 
+  archive { '7-zip':
+    source       => 'http://www.7-zip.org/a/7z1701-x64.exe',
+    extract      => true,
+    extract_path => '/tmp',
+    creates      => '/tmp/7z1701-x64.exe',
+    cleanup      => false,
+    notify       => Reboot['after'],
+  }
+
+  reboot { 'after':
+    apply => finished,
+  }
+
+
+  #staging::deploy { '7-zip':
+  #  source => 'http://www.7-zip.org/a/7z1701-x64.exe',
+  #}
+
 }
