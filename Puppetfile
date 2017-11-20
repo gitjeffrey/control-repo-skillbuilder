@@ -6,3 +6,4 @@ mod 'puppet-staging', :latest
 mod 'puppet-archive', :latest
 mod 'puppetlabs-iis', :latest
 mod 'puppetlabs-windows', :latest
+mod 'puppetlabs-reboot', :latest

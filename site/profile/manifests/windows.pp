@@ -24,16 +24,16 @@ class profile::windows (
     group  => 'wingrp',
   }
 
-  puppetlabs::archive { '7-zip':
+  ::puppetlabs::archive { '7-zip':
     source       => 'http://www.7-zip.org/a/7z1701-x64.exe',
     extract      => true,
     extract_path => '/tmp',
     creates      => '/tmp/7z1701-x64.exe',
     cleanup      => false,
-    notify       => Reboot['after'],
+    notify       => ::puppetlabs::Reboot['after'],
   }
 
-  puppetlabs::reboot { 'after':
+  ::puppetlabs::reboot { 'after':
     apply => finished,
   }
 
