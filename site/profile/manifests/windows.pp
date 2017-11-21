@@ -40,19 +40,12 @@ class profile::windows (
   #}
 
   class { 'archive':
-    namevar            => '7zip',
     seven_zip_name     => '7-Zip (x64 edition)',
     seven_zip_source   => 'http://www.7-zip.org/a/7z1701-x64.msi',
     seven_zip_provider => 'windows',
   }
+  -> reboot { 'after': }
 
-  reboot { 'after':
-    subscribe => Archive['7zip'],
-  }
-
-
-  #staging::deploy { '7-zip':
-  #  source => 'http://www.7-zip.org/a/7z1701-x64.exe',
-  #}
+  #notify {'puppet-archive class.':}
 
 }
