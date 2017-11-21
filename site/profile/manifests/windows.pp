@@ -28,19 +28,26 @@ class profile::windows (
 
   #archive { '/tmp/7z1701-x64.exe':
   #  ensure       => present,
-  #  source       => 'http://www.7-zip.org/a/7z1701-x64.exe',
+  #  source       => 'http://www.7-zip.org/a/7z1701-x64.msi',
   #  extract      => true,
   #  extract_path => '/tmp',
-  #  creates      => '/tmp/7z1701-x64.exe',
+  #  creates      => '/tmp/7z1701-x64.msi',
   #  cleanup      => false,
   #}
 
-  archive { '/tmp/7z1701-x64.exe':
-    source => 'http://www.7-zip.org/a/7z1701-x64.exe',
+  class { 'archive':
+    namevar            => '7zip',
+    seven_zip_name     => '7-Zip (x64 edition)',
+    seven_zip_source   => 'http://www.7-zip.org/a/7z1701-x64.msi',
+    seven_zip_provider => 'windows',
   }
 
+  #archive { '/tmp/7z1701-x64.exe':
+  #  source => 'http://www.7-zip.org/a/7z1701-x64.exe',
+  #}
+
   reboot { 'after':
-    subscribe => Archive['/tmp/7z1701-x64.exe'],
+    subscribe => Archive['7zip'],
   }
 
 
