@@ -44,7 +44,9 @@ class profile::windows (
     seven_zip_source   => 'http://www.7-zip.org/a/7z1701-x64.msi',
     seven_zip_provider => 'windows',
   }
-  -> reboot { 'after': }
+  -> reboot { 'after':
+    apply  => finished,
+  }
 
   #notify {'puppet-archive class.':}
 
