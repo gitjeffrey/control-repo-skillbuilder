@@ -24,7 +24,11 @@ class profile::windows (
     group  => 'wingrp',
   }
 
-  include 'archive'
+  #archive { '/tmp/7z1701-x64.msi':
+  #  source => 'http://www.7-zip.org/a/7z1701-x64.msi',
+  #}
+
+  #include 'archive'
 
   #archive { '/tmp/7z1701-x64.exe':
   #  ensure       => present,
@@ -41,10 +45,6 @@ class profile::windows (
     seven_zip_source   => 'http://www.7-zip.org/a/7z1701-x64.msi',
     seven_zip_provider => 'windows',
   }
-
-  #archive { '/tmp/7z1701-x64.exe':
-  #  source => 'http://www.7-zip.org/a/7z1701-x64.exe',
-  #}
 
   reboot { 'after':
     subscribe => Archive['7zip'],
