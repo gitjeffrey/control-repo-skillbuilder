@@ -24,16 +24,23 @@ class profile::windows (
     group  => 'wingrp',
   }
 
-  archive { '7-zip':
-    source       => 'http://www.7-zip.org/a/7z1701-x64.exe',
-    extract      => true,
-    extract_path => '/tmp',
-    creates      => '/tmp/7z1701-x64.exe',
-    cleanup      => false,
+  include 'archive'
+
+  #archive { '/tmp/7z1701-x64.exe':
+  #  ensure       => present,
+  #  source       => 'http://www.7-zip.org/a/7z1701-x64.exe',
+  #  extract      => true,
+  #  extract_path => '/tmp',
+  #  creates      => '/tmp/7z1701-x64.exe',
+  #  cleanup      => false,
+  #}
+
+  archive { '/tmp/7z1701-x64.exe':
+    source => 'http://www.7-zip.org/a/7z1701-x64.exe',
   }
 
   reboot { 'after':
-    subscribe       => Archive['7-zip'],
+    subscribe => Archive['/tmp/7z1701-x64.exe'],
   }
 
 
