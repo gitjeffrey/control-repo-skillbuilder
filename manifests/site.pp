@@ -28,9 +28,6 @@ node default {
   # This is where you can declare classes for all nodes.
   # Example:
   #   class { 'my_class': }
-  # This is where you can declare classes for all nodes.
-  # Example:
-  #   class { 'my_class': }
   if $facts['kernel'] == 'Linux' {
     class { 'ntp':
       servers => [ 'time.nist.gov' ],

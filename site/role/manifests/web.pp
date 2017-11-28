@@ -1,5 +1,5 @@
-class role::lamp {
-  include profile::apache
+class role::web {
+  include ::profile::apache
   #include profile::mysql
 
 #  Class['::profile::apache']

@@ -11,7 +11,7 @@
 #
 notify {'output_before':
   message => 'gitver module called.',
-  before => Class['gitver'],
+  before  => Class['gitver'],
 }
 
 #notice('gitver module called...')
