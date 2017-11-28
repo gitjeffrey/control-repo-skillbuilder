@@ -3,7 +3,7 @@
 class profile::windows (
 ) {
 
-  notify {'profile::windows b4 user resource.':}
+  #notify {'The profile::windows class says hi!':}
 
   user { 'winpup':
     ensure   => 'present',
@@ -24,21 +24,6 @@ class profile::windows (
     group  => 'wingrp',
   }
 
-  #archive { '/tmp/7z1701-x64.msi':
-  #  source => 'http://www.7-zip.org/a/7z1701-x64.msi',
-  #}
-
-  #include 'archive'
-
-  #archive { '/tmp/7z1701-x64.exe':
-  #  ensure       => present,
-  #  source       => 'http://www.7-zip.org/a/7z1701-x64.msi',
-  #  extract      => true,
-  #  extract_path => '/tmp',
-  #  creates      => '/tmp/7z1701-x64.msi',
-  #  cleanup      => false,
-  #}
-
   class { 'archive':
     seven_zip_name     => '7-Zip (x64 edition)',
     seven_zip_source   => 'http://www.7-zip.org/a/7z1701-x64.msi',
@@ -46,7 +31,5 @@ class profile::windows (
     notify             => Reboot['after']
   }
   -> reboot { 'after': }
-
-  #notify {'puppet-archive class.':}
 
 }
