@@ -6,6 +6,7 @@
 Facter.add('rpm_system_files') do
   setcode do
     filelist = Facter::Core::Execution.exec("rpm -Va | grep -o \'/.*$\'")
-    filelist.split('\n')
+    filelist = filelist.split('\n')
+    filelist
   end
 end
