@@ -7,23 +7,23 @@ class harden_linux::secure {
 
   $harden_linux::rpm_files.each |String $rpm_filename| {
 
-    String harden_linux::rpm_package = ''
+    $rpm_package = ''
 
     # Run the following command to determine which package owns the file:
     exec { 'v71849_0':
       command => "rpm -qf ${rpm_filename}",
-      return  => $harden_linux::rpm_package,
+      return  => $rpm_package,
     }
 
     # Set file permissions and owner per rpm package spec...
-    if ($harden_linux::rpm_package != '') {
+    if ($rpm_package != '') {
 
       exec { 'v71849_1':
-        command => "rpm --setperms ${harden_linux::rpm_package}",
+        command => "rpm --setperms ${rpm_package}",
       }
 
       exec { 'v71849_2':
-        command => "rpm --setugids ${harden_linux::rpm_package}",
+        command => "rpm --setugids ${rpm_package}",
       }
 
     }
