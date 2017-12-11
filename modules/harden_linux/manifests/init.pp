@@ -44,5 +44,14 @@
 #
 class harden_linux {
 
+  Firewall {
+    require => undef,
+  }
+
+  resources { 'firewall':
+    purge => true,
+  }
+
+  include ::harden_linux::secure
 
 }
