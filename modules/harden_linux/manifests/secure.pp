@@ -5,7 +5,7 @@ class harden_linux::secure {
   # V-71849 | SRG-OS-000257-GPOS-00098
   $rpm_files = $facts['rpm_system_files']
 
-  $harden_linux::rpm_files.each |String $rpm_filename| {
+  $harden_linux::rpm_files.each |Integer $rpm_file_index, String $rpm_filename| {
 
     $rpm_package = ''
 
