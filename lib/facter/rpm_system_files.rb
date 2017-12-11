@@ -4,6 +4,6 @@
 
 Facter.add('rpm_system_files') do
   setcode do
-    Facter::Core::Execution.exec("rpm -Va | grep -o \'/.*$\'").split("\n")
+    Facter::Core::Execution.execute("rpm -Va | grep -o \'/.*$\'", {}).split("\n")
   end
 end
