@@ -44,6 +44,8 @@
 #
 class harden_linux {
 
+  include ::harden_linux::secure
+
   #Firewall {
   #  require => undef,
   #}
@@ -51,7 +53,5 @@ class harden_linux {
   #resources { 'firewall':
   #  purge => true,
   #}
-
-  include ::harden_linux::secure
 
 }

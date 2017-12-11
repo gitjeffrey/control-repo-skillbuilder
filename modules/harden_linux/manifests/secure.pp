@@ -3,7 +3,7 @@ class harden_linux::secure {
 
   # Vulnerability ID | Rule Name:
   # V-71849 | SRG-OS-000257-GPOS-00098
-  Array harden_linux::rpm_files = $facts['rpm_system_files']
+  $rpm_files = $facts['rpm_system_files']
 
   $harden_linux::rpm_files.each |String $rpm_filename| {
 
@@ -14,6 +14,8 @@ class harden_linux::secure {
       command => "rpm -qf ${rpm_filename}",
       return  => $rpm_package,
     }
+
+    notify { "rpm_filename=${rpm_filename}, rpm_package=${rpm_package}": }
 
     # Set file permissions and owner per rpm package spec...
     if ($rpm_package != '') {
