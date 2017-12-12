@@ -11,17 +11,10 @@ class harden_linux::secure {
 
     notice("rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}")
 
-    # Set file permissions and owner per rpm package spec...
+    # Ask rpm package to reset file permissions and owner to match rpm spec...
     if ($rpm_package != '') {
-
-      exec { 'v71849_0':
-        command => "rpm --setperms ${rpm_package}",
-      }
-
-      exec { 'v71849_1':
-        command => "rpm --setugids ${rpm_package}",
-      }
-
+      exec { "rpm --setperms ${rpm_package}": }
+      exec { "rpm --setugids ${rpm_package}": }
     }
 
   }
