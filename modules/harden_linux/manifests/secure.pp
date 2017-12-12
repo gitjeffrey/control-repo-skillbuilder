@@ -15,11 +15,11 @@ class harden_linux::secure {
     if ($rpm_package != '') {
 
       exec { "rpm --setperms ${rpm_package}":
-        path => '/usr/bin'
+        path => ['/usr/bin', '/usr/sbin']
       }
 
       exec { "rpm --setugids ${rpm_package}":
-        path => '/usr/bin'
+        path => ['/usr/bin', '/usr/sbin']
       }
 
     }
