@@ -13,8 +13,8 @@ class harden_linux::secure {
 
     # Ask rpm package to reset file permissions and owner to match rpm spec...
     if ($rpm_package != '') {
-      exec { "rpm --setperms ${rpm_package}": }
-      exec { "rpm --setugids ${rpm_package}": }
+      exec { "/usr/bin/rpm --setperms ${rpm_package}": }
+      exec { "/usr/bin/rpm --setugids ${rpm_package}": }
     }
 
   }
