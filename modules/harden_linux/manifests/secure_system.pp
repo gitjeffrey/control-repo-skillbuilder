@@ -35,11 +35,12 @@ class harden_linux::secure_system {
 
       }
 
-    } else {
-      notice('DoD STIG: Vulnerability V-71849 & V-71855 completed.  Details: no files to process.')
     }
 
+  } else {
+    notice('DoD STIG: Vulnerability V-71849 & V-71855 completed.  Details: no files to process.')
   }
+
 
   # V-71859 | SRG-OS-000023-GPOS-00006
   # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
