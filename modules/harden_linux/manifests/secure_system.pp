@@ -45,12 +45,15 @@ By using this IS (which includes any device attached to this IS), you consent to
 -This IS includes security measures (e.g., authentication and access controls) to protect USG interests--not for your personal benefit or privacy.
 zx-Notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details."
 
-  if (!$facts['gnome_version_file_exists']) {
+  notice("DoD STIG: Vulnerability V-71859 starting.  Details: gnome_version_file_exists=${facts['gnome_version_file_exists']}")
+
+  if ($facts['gnome_version_file_exists']) {
+    notice("DoD STIG: Vulnerability V-71859 passed if().  Details: gnome_version_file_exists=${facts['gnome_version_file_exists']}")
     file { '/etc/dconf/profile/gdm':
       ensure  => file,
       owner   => 'root',
       group   => 'root',
-      mode    => '0644',
+      mode    => '0622',
       content => "user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults",
@@ -68,7 +71,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       path => ['/usr/bin', '/usr/sbin']
     }
 
-    notice("DoD STIG: Vulnerability V-71859 completed.  Details: gnome_version_file_exists=${facts}['gnome_version_file_exists']")
+    notice("DoD STIG: Vulnerability V-71859 completed.  Details: gnome_version_file_exists=${facts['gnome_version_file_exists']}")
 
   }
 
