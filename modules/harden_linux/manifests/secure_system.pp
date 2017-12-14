@@ -7,30 +7,36 @@ class harden_linux::secure_system {
 
   $rpm_files = $facts['rpm_system_files']
 
-  $harden_linux::secure::rpm_files.each |String $rpm_filename, String $rpm_package| {
+  if $rpm_files != undef {
 
-    # Ask rpm package to reset file permissions and owner to match rpm spec...
-    if ($rpm_package != '') {
+    $harden_linux::secure::rpm_files.each |String $rpm_filename, String $rpm_package| {
 
-      # V-71849 | SRG-OS-000257-GPOS-00098
-      exec { "rpm --setperms ${rpm_package}":
-        path => ['/usr/bin', '/usr/sbin']
+      # Ask rpm package to reset file permissions and owner to match rpm spec...
+      if ($rpm_package != '') {
+
+        # V-71849 | SRG-OS-000257-GPOS-00098
+        exec { "rpm --setperms ${rpm_package}":
+          path => ['/usr/bin', '/usr/sbin']
+        }
+
+        # V-71849 | SRG-OS-000257-GPOS-00098
+        exec { "rpm --setugids ${rpm_package}":
+          path => ['/usr/bin', '/usr/sbin']
+        }
+
+        notice("DoD STIG: Vulnerability V-71849 completed.  Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}")
+
+        # V-71855 | SRG-OS-000480-GPOS-00227
+        exec { "rpm -Uvh ${rpm_package}":
+          path => ['/usr/bin', '/usr/sbin']
+        }
+
+        notice("DoD STIG: Vulnerability V-71855 completed.  Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}")
+
       }
 
-      # V-71849 | SRG-OS-000257-GPOS-00098
-      exec { "rpm --setugids ${rpm_package}":
-        path => ['/usr/bin', '/usr/sbin']
-      }
-
-      notice("DoD STIG: Vulnerability V-71849 completed.  Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}")
-
-      # V-71855 | SRG-OS-000480-GPOS-00227
-      exec { "rpm -Uvh ${rpm_package}":
-        path => ['/usr/bin', '/usr/sbin']
-      }
-
-      notice("DoD STIG: Vulnerability V-71855 completed.  Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}")
-
+    } else {
+      notice('DoD STIG: Vulnerability V-71849 & V-71855 completed.  Details: no files to process.')
     }
 
   }
