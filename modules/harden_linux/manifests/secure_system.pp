@@ -37,6 +37,8 @@ class harden_linux::secure_system {
   # V-71859 | SRG-OS-000023-GPOS-00006
   # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
 
+  $short_banner_msg = "I've read & consent to terms in IS user agreem't."
+
   $banner_msg = "You are accessing a U.S. Government (USG) Information System (IS) that is provided for USG-authorized use only.
 By using this IS (which includes any device attached to this IS), you consent to the following conditions:
 -The USG routinely intercepts and monitors communications on this IS for purposes including, but not limited to, penetration testing, COMSEC monitoring, network operations and defense, personnel misconduct (PM), law enforcement (LE), and counterintelligence (CI) investigations.
@@ -64,7 +66,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
+      content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${short_banner_msg}'",
     }
 
     # Added this directory location due to GNOME help.
