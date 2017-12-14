@@ -8,12 +8,9 @@ class harden_linux::secure_system {
   $rpm_files = $facts['rpm_system_files']
 
   if $rpm_files != undef {
-
-    $harden_linux::secure::rpm_files.each |String $rpm_filename, String $rpm_package| {
-
+    $rpm_files.each |String $rpm_filename, String $rpm_package| {
       # Ask rpm package to reset file permissions and owner to match rpm spec...
       if ($rpm_package != '') {
-
         # V-71849 | SRG-OS-000257-GPOS-00098
         exec { "rpm --setperms ${rpm_package}":
           path => ['/usr/bin', '/usr/sbin']
@@ -23,20 +20,15 @@ class harden_linux::secure_system {
         exec { "rpm --setugids ${rpm_package}":
           path => ['/usr/bin', '/usr/sbin']
         }
-
         notice("DoD STIG: Vulnerability V-71849 completed.  Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}")
 
         # V-71855 | SRG-OS-000480-GPOS-00227
         exec { "rpm -Uvh ${rpm_package}":
           path => ['/usr/bin', '/usr/sbin']
         }
-
         notice("DoD STIG: Vulnerability V-71855 completed.  Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}")
-
       }
-
     }
-
   } else {
     notice('DoD STIG: Vulnerability V-71849 & V-71855 completed.  Details: no files to process.')
   }
@@ -51,7 +43,7 @@ By using this IS (which includes any device attached to this IS), you consent to
 -At any time, the USG may inspect and seize data stored on this IS.
 -Communications using, or data stored on, this IS are not private, are subject to routine monitoring, interception, and search, and may be disclosed or used for any USG-authorized purpose.
 -This IS includes security measures (e.g., authentication and access controls) to protect USG interests--not for your personal benefit or privacy.
--Notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details."
+zx-Notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details."
 
   if (!$facts['gnome_version_file_exists']) {
     file { '/etc/dconf/profile/gdm':
