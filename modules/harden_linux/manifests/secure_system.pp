@@ -67,6 +67,16 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
 
+    # Added this directory location due to GNOME help.
+    # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
+    file { '/etc/dconf/db/gdm.d/01-banner-message':
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
+    }
+
     exec { 'dconf update':
       path => ['/usr/bin', '/usr/sbin']
     }
