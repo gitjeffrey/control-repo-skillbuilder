@@ -1,11 +1,11 @@
 # ::harden_linux::secure
 # Harden node to Department of Defense STIG standards.
-# Vulnerability ID | Rule Name:
+# Vulnerability ID:
 
 
 class harden_linux::secure_system {
 
-  # V-71849 | SRG-OS-000257-GPOS-00098
+  # V-71849
   $rpm_system_files = $facts['rpm_system_files']
 
   if $rpm_system_files != undef {
@@ -26,7 +26,7 @@ class harden_linux::secure_system {
   }
 
 
-  # V-71855 | SRG-OS-000480-GPOS-00227
+  # V-71855
   $rpm_files_check_hash = $facts['rpm_files_check_hash']
 
   if $rpm_files_check_hash != undef {
@@ -44,8 +44,9 @@ class harden_linux::secure_system {
   }
 
 
-  # V-71859 | SRG-OS-000023-GPOS-00006
-  # V-71861 | SRG-OS-000023-GPOS-00006
+  # V-71859
+  # V-71861
+  # Additionally, used information from GNOME help...
   # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
 
   $short_banner_msg = "I've read & consent to terms in IS user agreem't."
@@ -67,7 +68,7 @@ IS does not constitute consent to PM, LE or CI investigative searching or \
 monitoring of the content of privileged communications, or work product, \
 related to personal representation or services by attorneys, \
 psychotherapists, or clergy, and their assistants. Such communications and \
-work product are private and confidential. See User Agreement for details."
+work product are private and confidential. See User Agreement for details. \n"
 
   # Note: the \n escape character didn't work for this config file...
   if ($facts['gnome_version_file_exists']) {
@@ -89,7 +90,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       backup  => '.bak',
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
-    # Added this directory location due to GNOME help.
+    # Added this directory location after reading GNOME help...
     # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
     file { '/etc/dconf/db/gdm.d/01-banner-message':
       ensure  => file,
@@ -102,11 +103,12 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
     exec { 'dconf update':
       path => ['/usr/bin', '/usr/sbin']
     }
-    notice("DoD STIG: vulnerability V-71859 & V-71861 fixes applied (details: gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
+    notice("DoD STIG: vulnerability V-71859 & V-71861 fixes applied (details: \
+gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
   }
 
 
-    # V-71863 | SRG-OS-000023-GPOS-00006
+    # V-71863
     file { '/etc/issue':
       ensure  => file,
       owner   => 'root',
@@ -116,5 +118,33 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       content => $banner_msg,
     }
     notice('DoD STIG: vulnerability V-71863 fix applied (details: /etc/issue content changed).')
+
+
+    # V-71891
+    if ($facts['gnome_version_file_exists']) {
+      file { '/etc/dconf/db/local.d/00-screensaver':
+        ensure  => file,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        backup  => '.bak',
+        content => 'lock-enabled=true',
+      }
+      # Added this directory location after reading GNOME help...
+      # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
+      file { '/etc/dconf/db/gdm.d/00-screensaver':
+        ensure  => file,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        backup  => '.bak',
+        content => 'lock-enabled=true',
+      }
+      exec { 'dconf update':
+        path => ['/usr/bin', '/usr/sbin']
+      }
+      notice("DoD STIG: vulnerability V-71891 fix applied (details: \
+  gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
+  }
 
 }
