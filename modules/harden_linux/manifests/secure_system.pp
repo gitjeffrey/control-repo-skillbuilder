@@ -49,8 +49,8 @@ class harden_linux::secure_system {
   # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
 
   $short_banner_msg = "I've read & consent to terms in IS user agreem't."
-  $banner_msg = "You are accessing a U.S. Government (USG) Information System \
-  (IS) that is provided for USG-authorized use only.\nBy using this IS (which \
+  $banner_msg = "You are accessing a U.S. Government (USG) Information System (IS) \
+    that is provided for USG-authorized use only.\nBy using this IS (which \
     includes any device attached to this IS), you consent to the following \
     conditions:\n-The USG routinely intercepts and monitors communications \
     on this IS for purposes including, but not limited to, penetration testing, \
@@ -68,13 +68,14 @@ class harden_linux::secure_system {
     psychotherapists, or clergy, and their assistants. Such communications and \
     work product are private and confidential. See User Agreement for details."
 
+  # Note: the \n escape character didn't work for this config file...
   if ($facts['gnome_version_file_exists']) {
     file { '/etc/dconf/profile/gdm':
       ensure  => file,
       owner   => 'root',
       group   => 'root',
       mode    => '0622',
-      backup  => '.bak'
+      backup  => '.bak',
       content => "user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults",
@@ -84,7 +85,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      backup  => '.bak'
+      backup  => '.bak',
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
     # Added this directory location due to GNOME help.
@@ -94,14 +95,14 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      backup  => '.bak'
+      backup  => '.bak',
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
     exec { 'dconf update':
       path => ['/usr/bin', '/usr/sbin']
     }
     notice("DoD STIG: vulnerability V-71859 & V-71861 fixes applied (details: \
-      gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
+    #  gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
   }
 
 
@@ -111,10 +112,9 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       owner   => 'root',
       group   => 'root',
       mode    => '0622',
-      backup  => '.bak'
+      backup  => '.bak',
       content => $banner_msg,
     }
     notice('DoD STIG: vulnerability V-71863 fix applied (details: /etc/issue content changed).')
-
 
 }
