@@ -1,36 +1,46 @@
 # ::harden_linux::secure
 # Harden node to Department of Defense STIG standards.
+# Vulnerability ID | Rule Name:
+
 
 class harden_linux::secure_system {
 
-  # Vulnerability ID | Rule Name:
+  # V-71849 | SRG-OS-000257-GPOS-00098
+  $rpm_system_files = $facts['rpm_system_files']
 
-  $rpm_files = $facts['rpm_system_files']
-
-  if $rpm_files != undef {
-    $rpm_files.each |String $rpm_filename, String $rpm_package| {
+  if $rpm_system_files != undef {
+    $rpm_system_files.each |String $rpm_filename, String $rpm_package| {
       # Ask rpm package to reset file permissions and owner to match rpm spec...
       if ($rpm_package != '') {
-        # V-71849 | SRG-OS-000257-GPOS-00098
         exec { "rpm --setperms ${rpm_package}":
           path => ['/usr/bin', '/usr/sbin']
         }
-
-        # V-71849 | SRG-OS-000257-GPOS-00098
         exec { "rpm --setugids ${rpm_package}":
           path => ['/usr/bin', '/usr/sbin']
         }
-        notice("DoD STIG: Vulnerability V-71849 completed.  Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}")
-
-        # V-71855 | SRG-OS-000480-GPOS-00227
-        exec { "rpm -Uvh ${rpm_package}":
-          path => ['/usr/bin', '/usr/sbin']
-        }
-        notice("DoD STIG: Vulnerability V-71855 completed.  Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}")
+        notice("DoD STIG: vulnerability V-71849 fix applied (details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}).")
       }
     }
   } else {
-    notice('DoD STIG: Vulnerability V-71849 & V-71855 completed.  Details: no files to process.')
+    notice('DoD STIG: vulnerability V-71849 addressed (details: no files to process).')
+  }
+
+
+  # V-71855 | SRG-OS-000480-GPOS-00227
+  $rpm_files_check_hash = $facts['rpm_files_check_hash']
+
+  if $rpm_files_check_hash != undef {
+    $rpm_files_check_hash.each |String $rpm_filename, String $rpm_package| {
+      # Ask rpm package to reset file permissions and owner to match rpm spec...
+      if ($rpm_package != '') {
+        exec { "rpm -Uvh ${rpm_package}":
+          path => ['/usr/bin', '/usr/sbin']
+        }
+        notice("DoD STIG: vulnerability V-71855 fix applied (details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}).")
+      }
+    }
+  } else {
+    notice('DoD STIG: vulnerability V-71855 addressed (details: no files to process).')
   }
 
 
@@ -76,8 +86,6 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       path => ['/usr/bin', '/usr/sbin']
     }
 
-    notice("DoD STIG: Vulnerability V-71859 & V-71861 completed.  Details: gnome_version_file_exists=${facts['gnome_version_file_exists']}")
-
+    notice("DoD STIG: Vulnerability V-71859 & V-71861 fix applied (details: gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
   }
-
 }
