@@ -76,7 +76,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       path => ['/usr/bin', '/usr/sbin']
     }
 
-    notice("DoD STIG: Vulnerability V-71859 completed.  Details: gnome_version_file_exists=${facts['gnome_version_file_exists']}")
+    notice("DoD STIG: Vulnerability V-71859 & V-71861 completed.  Details: gnome_version_file_exists=${facts['gnome_version_file_exists']}")
 
   }
 
