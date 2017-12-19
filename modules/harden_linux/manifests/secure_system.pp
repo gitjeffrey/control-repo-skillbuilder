@@ -160,7 +160,9 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
     }
 
     exec { 'dconf update':
-      path => ['/usr/bin', '/usr/sbin'],
+      path    => ['/usr/bin', '/usr/sbin'],
+      require => [ File['/etc/dconf/db/local.d/00-screensaver'],\
+        File['/etc/dconf/db/gdm.d/01-banner-message'] ],
     }
 
     if $::harden_linux::secure_system::logging {
