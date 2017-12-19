@@ -147,7 +147,7 @@ lock-delay=uint32 0",
     }
 
     # lock screensaver settings to prevent user override...
-    file { '/etc/dconf/db/local.db/locks/screensaver':
+    file { '/etc/dconf/db/local.d/locks/screensaver':
       ensure  => file,
       owner   => 'root',
       group   => 'root',
@@ -161,8 +161,7 @@ lock-delay=uint32 0",
 
     exec { 'dconf update':
       path    => ['/usr/bin', '/usr/sbin'],
-      require => [ File['/etc/dconf/db/local.d/00-screensaver']
-                , File['/etc/dconf/db/gdm.d/01-banner-message'] ],
+      require => File['/etc/dconf/db/local.d/00-screensaver'],
     }
 
     if $::harden_linux::secure_system::logging {
