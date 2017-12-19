@@ -44,7 +44,7 @@
 #
 class harden_linux {
 
-  include ::harden_linux::secure_system
+  class { '::harden_linux::secure_system': }
 
   #Firewall {
   #  require => undef,

@@ -5,43 +5,76 @@
 
 class harden_linux::secure_system {
 
+  $logging = true
+
   # V-71849
   $rpm_system_files = $facts['rpm_system_files']
 
   if $rpm_system_files != undef {
+
     $rpm_system_files.each |String $rpm_filename, String $rpm_package| {
+
       # Ask rpm package to reset file permissions and owner to match rpm spec...
       if ($rpm_package != '') {
+
         exec { "rpm --setperms ${rpm_package}":
           path => ['/usr/bin', '/usr/sbin']
         }
+
         exec { "rpm --setugids ${rpm_package}":
           path => ['/usr/bin', '/usr/sbin']
         }
-        notice("DoD STIG: vulnerability V-71849 fix applied (details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}).")
+
+        if $::harden_linux::secure_system::logging {
+          notice("DoD STIG: vulnerability V-71849 fix applied (details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}).")
+        }
+
       }
+
     }
+
   } else {
-    notice('DoD STIG: vulnerability V-71849 addressed (details: no files to process).')
+
+    if $::harden_linux::secure_system::logging {
+      notice('DoD STIG: vulnerability V-71849 addressed (details: no files to process).')
+    }
+
   }
+
+
 
 
   # V-71855
   $rpm_files_check_hash = $facts['rpm_files_check_hash']
 
   if $rpm_files_check_hash != undef {
+
     $rpm_files_check_hash.each |String $rpm_filename, String $rpm_package| {
-      # Ask rpm package to reset file permissions and owner to match rpm spec...
+
       if ($rpm_package != '') {
+
+        # Ask rpm to check the cryptographic hash of system files it installed.
         exec { "rpm -Uvh ${rpm_package}":
           path => ['/usr/bin', '/usr/sbin']
         }
-        notice("DoD STIG: vulnerability V-71855 fix applied (details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}).")
+
+        if $::harden_linux::secure_system::logging {
+          notice("DoD STIG: vulnerability V-71855 fix applied (details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}).")
+        }
+
       }
+
     }
+
   } else {
-    notice('DoD STIG: vulnerability V-71855 addressed (details: no files to process).')
+
+    if $::harden_linux::secure_system::logging {
+      notice('DoD STIG: vulnerability V-71855 addressed (details: no files to process).')
+    }
+
   }
+
+
 
 
   # V-71859
@@ -72,6 +105,7 @@ work product are private and confidential. See User Agreement for details. \n"
 
   # Note: the \n escape character didn't work for this config file...
   if ($facts['gnome_version_file_exists']) {
+
     file { '/etc/dconf/profile/gdm':
       ensure  => file,
       owner   => 'root',
@@ -82,6 +116,7 @@ work product are private and confidential. See User Agreement for details. \n"
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults",
     }
+
     file { '/etc/dconf/db/local.d/01-banner-message':
       ensure  => file,
       owner   => 'root',
@@ -90,6 +125,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       backup  => '.bak',
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
+
     # Added this directory location after reading GNOME help...
     # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
     file { '/etc/dconf/db/gdm.d/01-banner-message':
@@ -100,12 +136,19 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       backup  => '.bak',
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
+
     exec { 'dconf update':
       path => ['/usr/bin', '/usr/sbin']
     }
-    notice("DoD STIG: vulnerability V-71859 & V-71861 fixes applied (details: \
+
+    if $::harden_linux::secure_system::logging {
+      notice("DoD STIG: vulnerability V-71859 & V-71861 fixes applied (details: \
 gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
+    }
+
   }
+
+
 
 
     # V-71863
@@ -117,11 +160,17 @@ gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
       backup  => '.bak',
       content => $banner_msg,
     }
-    notice('DoD STIG: vulnerability V-71863 fix applied (details: /etc/issue content changed).')
+
+    if $::harden_linux::secure_system::logging {
+      notice('DoD STIG: vulnerability V-71863 fix applied (details: /etc/issue content changed).')
+    }
+
+
 
 
     # V-71891
     if ($facts['gnome_version_file_exists']) {
+
       file { '/etc/dconf/db/local.d/00-screensaver':
         ensure  => file,
         owner   => 'root',
@@ -130,6 +179,7 @@ gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
         backup  => '.bak',
         content => 'lock-enabled=true',
       }
+
       # Added this directory location after reading GNOME help...
       # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
       file { '/etc/dconf/db/gdm.d/00-screensaver':
@@ -140,11 +190,16 @@ gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
         backup  => '.bak',
         content => 'lock-enabled=true',
       }
+
       exec { 'dconf update':
         path => ['/usr/bin', '/usr/sbin']
       }
-      notice("DoD STIG: vulnerability V-71891 fix applied (details: \
+
+      if $::harden_linux::secure_system::logging {
+        notice("DoD STIG: vulnerability V-71891 fix applied (details: \
   gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
+      }
+
   }
 
 }
