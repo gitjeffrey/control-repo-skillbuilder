@@ -18,11 +18,11 @@ class harden_linux::secure_system {
       if ($rpm_package != '') {
 
         exec { "rpm --setperms ${rpm_package}":
-          path => ['/usr/bin', '/usr/sbin']
+          path => ['/usr/bin', '/usr/sbin'],
         }
 
         exec { "rpm --setugids ${rpm_package}":
-          path => ['/usr/bin', '/usr/sbin']
+          path => ['/usr/bin', '/usr/sbin'],
         }
 
         if $::harden_linux::secure_system::logging {
@@ -55,7 +55,7 @@ class harden_linux::secure_system {
 
         # Ask rpm to check the cryptographic hash of system files it installed.
         exec { "rpm -Uvh ${rpm_package}":
-          path => ['/usr/bin', '/usr/sbin']
+          path => ['/usr/bin', '/usr/sbin'],
         }
 
         if $::harden_linux::secure_system::logging {
@@ -79,6 +79,7 @@ class harden_linux::secure_system {
 
   # V-71859
   # V-71861
+  # V-71891
   # Additionally, used information from GNOME help...
   # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
 
@@ -137,12 +138,33 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
 
+    # V-71891
+    # Added this directory location after reading GNOME help...
+    # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
+    file { '/etc/dconf/db/gdm.d/00-screensaver':
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      backup  => '.bak',
+      content => 'lock-enabled=true',
+    }
+
+    file { '/etc/dconf/db/local.d/00-screensaver':
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      backup  => '.bak',
+      content => 'lock-enabled=true',
+    }
+
     exec { 'dconf update':
-      path => ['/usr/bin', '/usr/sbin']
+      path => ['/usr/bin', '/usr/sbin'],
     }
 
     if $::harden_linux::secure_system::logging {
-      notice("DoD STIG: vulnerability V-71859 & V-71861 fixes applied (details: \
+      notice("DoD STIG: vulnerabilities V-71859, V-71861 & V-71891 fixed (details: \
 gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
     }
 
@@ -164,42 +186,5 @@ gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
     if $::harden_linux::secure_system::logging {
       notice('DoD STIG: vulnerability V-71863 fix applied (details: /etc/issue content changed).')
     }
-
-
-
-
-    # V-71891
-    if ($facts['gnome_version_file_exists']) {
-
-      file { '/etc/dconf/db/local.d/00-screensaver':
-        ensure  => file,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        backup  => '.bak',
-        content => 'lock-enabled=true',
-      }
-
-      # Added this directory location after reading GNOME help...
-      # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
-      file { '/etc/dconf/db/gdm.d/00-screensaver':
-        ensure  => file,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        backup  => '.bak',
-        content => 'lock-enabled=true',
-      }
-
-      exec { 'dconf update':
-        path => ['/usr/bin', '/usr/sbin']
-      }
-
-      if $::harden_linux::secure_system::logging {
-        notice("DoD STIG: vulnerability V-71891 fix applied (details: \
-  gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
-      }
-
-  }
 
 }
