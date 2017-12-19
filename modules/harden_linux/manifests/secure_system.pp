@@ -1,7 +1,5 @@
-# ::harden_linux::secure
-# Harden node to Department of Defense STIG standards.
-# Vulnerability ID:
-
+# Class ::harden_linux::secure_system
+# Harden a system (node) to Department of Defense STIG standards.
 
 class harden_linux::secure_system {
 
@@ -42,8 +40,6 @@ class harden_linux::secure_system {
   }
 
 
-
-
   # V-71855
   $rpm_files_check_hash = $facts['rpm_files_check_hash']
 
@@ -75,13 +71,19 @@ class harden_linux::secure_system {
   }
 
 
-
-
   # V-71859
   # V-71861
   # V-71891
-  # Additionally, used information from GNOME help...
-  # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
+  # V-71893
+  #
+  # Sources:
+  # https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
+  # https://help.gnome.org/admin/system-admin-guide/stable/desktop-lockscreen.html.en
+  #
+  # Note:
+  # The example below is using the database "local" for the system,
+  # so the path is "/etc/dconf/db/local.d". This path must be modified if
+  # a database other than "local" is being used.
 
   $short_banner_msg = "I've read & consent to terms in IS user agreem't."
 
@@ -104,9 +106,9 @@ related to personal representation or services by attorneys, \
 psychotherapists, or clergy, and their assistants. Such communications and \
 work product are private and confidential. See User Agreement for details. \n"
 
-  # Note: the \n escape character didn't work for this config file...
   if ($facts['gnome_version_file_exists']) {
 
+    # Note: the \n escape character didn't work for this config file...
     file { '/etc/dconf/profile/gdm':
       ensure  => file,
       owner   => 'root',
@@ -114,7 +116,9 @@ work product are private and confidential. See User Agreement for details. \n"
       mode    => '0622',
       backup  => '.bak',
       content => "user-db:user
-system-db:gdm
+system-db:local
+system-db:site
+system-db:distro
 file-db:/usr/share/gdm/greeter-dconf-defaults",
     }
 
@@ -127,36 +131,32 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
 
-    # Added this directory location after reading GNOME help...
-    # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
-    file { '/etc/dconf/db/gdm.d/01-banner-message':
-      ensure  => file,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      backup  => '.bak',
-      content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
-    }
-
     # V-71891
-    # Added this directory location after reading GNOME help...
-    # Source: https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
-    file { '/etc/dconf/db/gdm.d/00-screensaver':
-      ensure  => file,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      backup  => '.bak',
-      content => 'lock-enabled=true',
-    }
-
     file { '/etc/dconf/db/local.d/00-screensaver':
       ensure  => file,
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
       backup  => '.bak',
-      content => 'lock-enabled=true',
+      content => "[org/gnome/desktop/session]
+idle-delay=uint32 900
+
+[org/gnome/desktop/screensaver]
+lock-enabled=true
+lock-delay=uint32 0",
+    }
+
+    # lock screensaver settings to prevent user override...
+    file { '/etc/dconf/db/local.db/locks/screensaver':
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      backup  => '.bak',
+      content => "# Lock desktop screensaver settings
+/org/gnome/desktop/session/idle-delay
+/org/gnome/desktop/screensaver/lock-enabled
+/org/gnome/desktop/screensaver/lock-delay",
     }
 
     exec { 'dconf update':
@@ -173,20 +173,18 @@ gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
   }
 
 
+  # V-71863
+  file { '/etc/issue':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0622',
+    backup  => '.bak',
+    content => $banner_msg,
+  }
 
-
-    # V-71863
-    file { '/etc/issue':
-      ensure  => file,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0622',
-      backup  => '.bak',
-      content => $banner_msg,
-    }
-
-    if $::harden_linux::secure_system::logging {
-      notice('DoD STIG: vulnerability V-71863 fix applied (details: /etc/issue content changed).')
-    }
+  if $::harden_linux::secure_system::logging {
+    notice('DoD STIG: vulnerability V-71863 fix applied (details: /etc/issue content changed).')
+  }
 
 }
