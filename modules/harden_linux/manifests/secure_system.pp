@@ -193,7 +193,8 @@ gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
   # V-71897
   if (!$facts['dod_yum_installed_screen_package']) {
 
-    exec { 'yum install screen':
+    # Added the -y option to answer yes to any prompts, else it fails.
+    exec { 'yum -y install screen':
       path    => ['/usr/bin', '/usr/sbin'],
     }
 
