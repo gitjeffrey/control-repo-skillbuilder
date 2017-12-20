@@ -3,10 +3,11 @@
 
 class harden_linux::secure_system {
 
+  # Turn log messages on/off for this manifest
   $logging = true
 
   # V-71849
-  $rpm_system_files = $facts['rpm_system_files']
+  $rpm_system_files = $facts['dod_rpm_system_files']
 
   if $rpm_system_files != undef {
 
@@ -41,7 +42,7 @@ class harden_linux::secure_system {
 
 
   # V-71855
-  $rpm_files_check_hash = $facts['rpm_files_check_hash']
+  $rpm_files_check_hash = $facts['dod_rpm_files_check_hash']
 
   if $rpm_files_check_hash != undef {
 
@@ -75,6 +76,7 @@ class harden_linux::secure_system {
   # V-71861
   # V-71891
   # V-71893
+  # V-71895
   #
   # Sources:
   # https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
@@ -106,7 +108,7 @@ related to personal representation or services by attorneys, \
 psychotherapists, or clergy, and their assistants. Such communications and \
 work product are private and confidential. See User Agreement for details. \n"
 
-  if ($facts['gnome_version_file_exists']) {
+  if ($facts['dod_gnome_version_file_exists']) {
 
     # Note: the \n escape character didn't work for this config file...
     file { '/etc/dconf/profile/gdm':
@@ -146,6 +148,7 @@ lock-enabled=true
 lock-delay=uint32 0",
     }
 
+    # V-71895
     # lock screensaver settings to prevent user override...
     file { '/etc/dconf/db/local.d/locks/screensaver':
       ensure  => file,
@@ -184,6 +187,20 @@ gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
 
   if $::harden_linux::secure_system::logging {
     notice('DoD STIG: vulnerability V-71863 fix applied (details: /etc/issue content changed).')
+  }
+
+
+  # V-71897
+  if (!$facts['dod_yum_installed_screen_package']) {
+
+    exec { 'yum install screen':
+      path    => ['/usr/bin', '/usr/sbin'],
+    }
+
+    if $::harden_linux::secure_system::logging {
+      notice('DoD STIG: vulnerability V-71897 fixed applied (details: screen package installed).')
+    }
+
   }
 
 }
