@@ -77,6 +77,8 @@ class harden_linux::secure_system {
   # V-71891
   # V-71893
   # V-71895
+  # V-71899
+  # V-71901
   #
   # Sources:
   # https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
@@ -133,7 +135,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
 
-    # V-71891
+    # V-71891, V-71899, V-71901
     file { '/etc/dconf/db/local.d/00-screensaver':
       ensure  => file,
       owner   => 'root',
@@ -144,8 +146,9 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
 idle-delay=uint32 900
 
 [org/gnome/desktop/screensaver]
+idle-activation-enabled=true
 lock-enabled=true
-lock-delay=uint32 0",
+lock-delay=uint32 5",
     }
 
     # V-71895
@@ -168,8 +171,8 @@ lock-delay=uint32 0",
     }
 
     if $::harden_linux::secure_system::logging {
-      notice("DoD STIG: vulnerabilities V-71859, V-71861 & V-71891 fixed (details: \
-gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
+      notice("DoD STIG: vulnerabilities V-71859, V-71861, V-71891, V-71899, V-71901 are fixed (details: \
+GNOME screensaver configuration complete).")
     }
 
   }
@@ -203,5 +206,73 @@ gnome_version_file_exists=${facts['gnome_version_file_exists']}).")
     }
 
   }
+
+
+  # V-71903, V-71905, V-71907, V-71909, V-71911, V-71913, V-71915, V-71917
+  $pwquality_conf = "# Configuration for systemwide password quality limits
+# Defaults:
+#
+# Number of characters in the new password that must not be present in the
+# old password.
+difok = 8
+#
+# Minimum acceptable size for the new password (plus one if
+# credits are not disabled which is the default). (See pam_cracklib manual.)
+# Cannot be set to lower value than 6.
+# minlen = 9
+#
+# The maximum credit for having digits in the new password. If less than 0
+# it is the minimum number of digits in the new password.
+dcredit = -1
+#
+# The maximum credit for having uppercase characters in the new password.
+# If less than 0 it is the minimum number of uppercase characters in the new
+# password.
+ucredit = -1
+#
+# The maximum credit for having lowercase characters in the new password.
+# If less than 0 it is the minimum number of lowercase characters in the new
+# password.
+lcredit = -1
+#
+# The maximum credit for having other characters in the new password.
+# If less than 0 it is the minimum number of other characters in the new
+# password.
+ocredit = -1
+#
+# The minimum number of required classes of characters for the new
+# password (digits, uppercase, lowercase, others).
+minclass = 4
+#
+# The maximum number of allowed consecutive same characters in the new password.
+# The check is disabled if the value is 0.
+maxrepeat = 3
+#
+# The maximum number of allowed consecutive characters of the same class in the
+# new password.
+# The check is disabled if the value is 0.
+maxclassrepeat = 4
+#
+# Whether to check for the words from the passwd entry GECOS string of the user.
+# The check is enabled if the value is not 0.
+# gecoscheck = 0
+#
+# Path to the cracklib dictionaries. Default is to use the cracklib default.
+# dictpath ="
+
+  file { '/etc/security/pwquality.conf':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0622',
+    backup  => '.bak',
+    content => $pwquality_conf,
+  }
+
+  if $::harden_linux::secure_system::logging {
+    notice('DoD STIG: vulnerability V-71903, V-71905, V-71907, V-71909, V-71911,\
+V-71913, V-71915, V-71917 fixes applied (details: pwquality.conf settings updated).')
+  }
+
 
 }
