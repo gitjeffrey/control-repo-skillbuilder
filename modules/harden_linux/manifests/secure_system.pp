@@ -270,8 +270,8 @@ maxclassrepeat = 4
   }
 
   if $::harden_linux::secure_system::logging {
-    notify { 'DoD STIG: vulnerability V-71903, V-71905, V-71907, V-71909, V-71911,\
-V-71913, V-71915, V-71917 fixes applied (details: pwquality.conf settings updated).':
+    notify { '*** DoD Hardening *** V-71903, V-71905, V-71907, V-71909, V-71911,\
+V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf settings updated.]':
       withpath => false,
     }
 
