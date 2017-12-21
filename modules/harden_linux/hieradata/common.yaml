@@ -1,2 +1,2 @@
 ---
-harden_linux::secure_system::log: true
+harden_linux::secure_system::log: false
