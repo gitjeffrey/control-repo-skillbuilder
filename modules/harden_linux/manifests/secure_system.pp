@@ -32,11 +32,13 @@ class harden_linux::secure_system (
 
         if $::harden_linux::secure_system::logging {
 
-          warning("${facts['fqdn']}: *** DoD Hardening *** V-71849 vulnerability fix applied. [Details: set group/user file permissions: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]")
+          warning("${facts['fqdn']}: *** DoD Hardening *** V-71849 vulnerability fix applied. \
+[Details: set group/user file permissions: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]")
 
           notify { "logmsg_file_perm_${rpm_package}_${rpm_filename}":
             withpath => false,
-            message  => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: set group/user file permissions: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]",
+            message  => "*** DoD Hardening *** V-71849 vulnerability fix applied. \
+[Details: set group/user file permissions: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]",
             loglevel => warning,
           }
 
@@ -79,11 +81,13 @@ class harden_linux::secure_system (
 
         if $::harden_linux::secure_system::logging {
 
-          warning("${facts['fqdn']}: *** DoD Hardening *** V-71855 vulnerability fix applied. [Details: Fix modified file hash: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]")
+          warning("${facts['fqdn']}: *** DoD Hardening *** V-71855 vulnerability fix applied. \
+[Details: Fix modified file hash: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]")
 
           notify { "logmsg_chk_hash_${rpm_package}_${rpm_filename}":
             withpath => false,
-            message  => "*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: Fix modified file hash: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]",
+            message  => "*** DoD Hardening *** V-71855 vulnerability fix applied. \
+[Details: Fix modified file hash: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]",
             loglevel => warning,
           }
 
@@ -110,13 +114,7 @@ class harden_linux::secure_system (
   }
 
 
-  # V-71859
-  # V-71861
-  # V-71891
-  # V-71893
-  # V-71895
-  # V-71899
-  # V-71901
+  # V-71859, V-71861, V-71891, V-71893, V-71895, V-71899, V-71901
   #
   # Sources:
   # https://help.gnome.org/admin/system-admin-guide/stable/login-banner.html.en
@@ -156,7 +154,7 @@ work product are private and confidential. See User Agreement for details. \n"
       owner   => 'root',
       group   => 'root',
       mode    => '0622',
-      backup  => '.b4',
+      backup  => '.b4.dod',
       content => "user-db:user
 system-db:local
 system-db:site
@@ -169,7 +167,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      backup  => '.b4',
+      backup  => '.b4.dod',
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
 
@@ -179,7 +177,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      backup  => '.b4',
+      backup  => '.b4.dod',
       content => "[org/gnome/desktop/session]
 idle-delay=uint32 900
 
@@ -196,7 +194,7 @@ lock-delay=uint32 5",
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      backup  => '.b4',
+      backup  => '.b4.dod',
       content => "# Lock desktop screensaver settings
 /org/gnome/desktop/session/idle-delay
 /org/gnome/desktop/screensaver/lock-enabled
@@ -210,11 +208,13 @@ lock-delay=uint32 5",
 
     if $::harden_linux::secure_system::logging {
 
-      warning("${facts['fqdn']}: *** DoD Hardening *** V-71859, V-71861, V-71891, V-71899, V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration complete.]")
+      warning("${facts['fqdn']}: *** DoD Hardening *** V-71859, V-71861, V-71891, \
+V-71899, V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration complete.]")
 
       notify { 'logmsg_gnome_scrsvr':
         withpath => false,
-        message  => '*** DoD Hardening *** V-71859, V-71861, V-71891, V-71899, V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration complete.]',
+        message  => "*** DoD Hardening *** V-71859, V-71861, V-71891, V-71899, \
+V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration complete.]",
         loglevel => warning,
       }
 
@@ -229,7 +229,7 @@ lock-delay=uint32 5",
     owner   => 'root',
     group   => 'root',
     mode    => '0622',
-    backup  => '.b4',
+    backup  => '.b4.dod',
     content => $banner_msg,
   }
 
@@ -256,11 +256,11 @@ lock-delay=uint32 5",
 
     if $::harden_linux::secure_system::logging {
 
-      warning("${facts['fqdn']}: *** DoD Hardening *** V-71897 vulnerability fixed applied. [Details: screen package installed.]")
+      warning("${facts['fqdn']}: *** DoD Hardening *** V-71897 vulnerability fix applied. [Details: screen package installed.]")
 
       notify { 'logmsg_screen_pkg':
         withpath => false,
-        message  => '*** DoD Hardening *** V-71897 vulnerability fixed applied. [Details: screen package installed.]',
+        message  => '*** DoD Hardening *** V-71897 vulnerability fix applied. [Details: screen package installed.]',
         loglevel => warning,
       }
 
@@ -270,6 +270,7 @@ lock-delay=uint32 5",
 
 
   # V-71903, V-71905, V-71907, V-71909, V-71911, V-71913, V-71915, V-71917
+
   $pwquality_conf = "# Configuration for systemwide password quality limits
 # Defaults:
 #
@@ -343,5 +344,43 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
     }
 
   }
+
+
+  # V-71919
+  # Red Hat 7 Security Guide recommends turning on shadow passwords,
+  # the /etc/shadow file is only read by root, whereas /etc/passwd is readable by everyone.
+  # Not sure why the "shadow" keyword was left off the DOD STIG.
+  # Adding "shadow" to:
+  # password sufficient pam_unix.so sha512
+  # password sufficient pam_unix.so sha512 shadow
+  #
+  # Source:
+  # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/chap-hardening_your_system_with_tools_and_services
+
+  # password    sufficient    pam_unix.so md5 shadow nullok try_first_pass use_authtok
+
+  file_line { '/etc/pam.d/system-auth-ac':
+      ensure  => present,
+      match   => '^password\s+sufficient\s+pam_unix\.so',
+      replace => true,
+      path    => '/etc/pam.d/system-auth-ac',
+      backup  => '.b4.dod',
+      line    => 'password sufficient pam_unix.so sha512 shadow',
+  }
+
+  if $::harden_linux::secure_system::logging {
+
+    warning("${facts['fqdn']}: *** DoD Hardening *** V-71919 vulnerability fix applied. \
+[Details: Set 'password sufficient pam_unix.so sha512 shadow' in /etc/pam.d/system-auth-ac]")
+
+    notify { 'logmsg_pam_encrypt_pwd':
+      withpath => false,
+      message  => "*** DoD Hardening *** V-71919 vulnerability fix applied. \
+[Details: Set 'password sufficient pam_unix.so sha512 shadow' in /etc/pam.d/system-auth-ac]",
+      loglevel => warning,
+    }
+
+  }
+
 
 }
