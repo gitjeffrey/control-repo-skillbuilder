@@ -118,7 +118,7 @@ work product are private and confidential. See User Agreement for details. \n"
       owner   => 'root',
       group   => 'root',
       mode    => '0622',
-      backup  => '.bak',
+      backup  => '.b4',
       content => "user-db:user
 system-db:local
 system-db:site
@@ -131,7 +131,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      backup  => '.bak',
+      backup  => '.b4',
       content => "[org/gnome/login-screen]\nbanner-message-enable=true\nbanner-message-text='${banner_msg}'",
     }
 
@@ -141,7 +141,7 @@ file-db:/usr/share/gdm/greeter-dconf-defaults",
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      backup  => '.bak',
+      backup  => '.b4',
       content => "[org/gnome/desktop/session]
 idle-delay=uint32 900
 
@@ -158,7 +158,7 @@ lock-delay=uint32 5",
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      backup  => '.bak',
+      backup  => '.b4',
       content => "# Lock desktop screensaver settings
 /org/gnome/desktop/session/idle-delay
 /org/gnome/desktop/screensaver/lock-enabled
@@ -184,7 +184,7 @@ GNOME screensaver configuration complete).")
     owner   => 'root',
     group   => 'root',
     mode    => '0622',
-    backup  => '.bak',
+    backup  => '.b4',
     content => $banner_msg,
   }
 
@@ -265,12 +265,12 @@ maxclassrepeat = 4
     owner   => 'root',
     group   => 'root',
     mode    => '0622',
-    backup  => '.bak',
+    backup  => '.b4',
     content => $pwquality_conf,
   }
 
   if $::harden_linux::secure_system::logging {
-    notice { 'DoD STIG: vulnerability V-71903, V-71905, V-71907, V-71909, V-71911,\
+    notify { 'DoD STIG: vulnerability V-71903, V-71905, V-71907, V-71909, V-71911,\
 V-71913, V-71915, V-71917 fixes applied (details: pwquality.conf settings updated).':
       withpath => false,
     }
