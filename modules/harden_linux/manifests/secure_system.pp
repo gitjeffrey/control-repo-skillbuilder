@@ -52,7 +52,7 @@ class harden_linux::secure_system {
 
   if $rpm_files_check_hash != undef {
 
-    $rpm_files_check_hash.each |String $rpm_filename, String $rpm_package| {
+    $rpm_files_check_hash.each |$index, String $rpm_filename, String $rpm_package| {
 
       if ($rpm_package != '') {
 
