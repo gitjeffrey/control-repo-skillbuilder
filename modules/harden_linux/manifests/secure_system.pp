@@ -29,11 +29,15 @@ class harden_linux::secure_system {
         }
 
         if $::harden_linux::secure_system::logging {
+
+          warning("*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]")
+
           notify { "logmsg_file_perm_${rpm_package}_${rpm_filename}":
             withpath => false,
             message  => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]",
-            loglevel => alert,
+            loglevel => warning,
           }
+
         }
 
       }
@@ -43,10 +47,15 @@ class harden_linux::secure_system {
   } else {
 
     if $::harden_linux::secure_system::logging {
+
+      warning('*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: no files to process.]')
+
       notify { 'logmsg_file_perm_no_files':
         withpath => false,
-        name     => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: no files to process.]'",
+        name     => '*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: no files to process.]',
+        loglevel => warning,
       }
+
     }
 
   }
@@ -67,10 +76,15 @@ class harden_linux::secure_system {
         }
 
         if $::harden_linux::secure_system::logging {
+
+          warning("*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]")
+
           notify { "logmsg_chk_hash_${rpm_package}_${rpm_filename}":
             withpath => false,
             name     => "*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]",
+            loglevel => warning,
           }
+
         }
 
       }
@@ -80,10 +94,15 @@ class harden_linux::secure_system {
   } else {
 
     if $::harden_linux::secure_system::logging {
+
+      warning('*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: no files to process.]')
+
       notify { 'logmsg_no_files_chk_hash':
         withpath => false,
-        name     => '*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: no files to process.]',
+        message  => '*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: no files to process.]',
+        loglevel => warning,
       }
+
     }
 
   }
