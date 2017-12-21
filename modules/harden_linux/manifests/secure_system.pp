@@ -223,6 +223,7 @@ lock-delay=uint32 5",
         withpath => false,
         name     => '*** DoD Hardening *** V-71897 vulnerability fixed applied. [Details: screen package installed.]',
       }
+    }
 
   }
 
@@ -296,6 +297,5 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
     }
 
   }
-
 
 }
