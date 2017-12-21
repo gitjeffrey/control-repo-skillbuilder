@@ -25,7 +25,10 @@ class harden_linux::secure_system {
         }
 
         if $::harden_linux::secure_system::logging {
-          notice("DoD STIG: vulnerability V-71849 fix applied (details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}).")
+          notify { 'logmsg_file_perm':
+            withpath => false,
+            name     => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}.]",
+          }
         }
 
       }
@@ -35,7 +38,10 @@ class harden_linux::secure_system {
   } else {
 
     if $::harden_linux::secure_system::logging {
-      notice('DoD STIG: vulnerability V-71849 addressed (details: no files to process).')
+      notify { 'logmsg_file_perm_no_files':
+        withpath => false,
+        name     => '*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: no files to process.]',
+      }
     }
 
   }
@@ -56,7 +62,10 @@ class harden_linux::secure_system {
         }
 
         if $::harden_linux::secure_system::logging {
-          notice("DoD STIG: vulnerability V-71855 fix applied (details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}).")
+          notify { 'logmsg_chk_hash':
+            withpath => false,
+            name     => "*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}.]",
+          }
         }
 
       }
@@ -66,7 +75,10 @@ class harden_linux::secure_system {
   } else {
 
     if $::harden_linux::secure_system::logging {
-      notice('DoD STIG: vulnerability V-71855 addressed (details: no files to process).')
+      notify { 'logmsg_no_files_chk_hash':
+        withpath => false,
+        name     => '*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: no files to process.]',
+      }
     }
 
   }
@@ -171,8 +183,10 @@ lock-delay=uint32 5",
     }
 
     if $::harden_linux::secure_system::logging {
-      notice("DoD STIG: vulnerabilities V-71859, V-71861, V-71891, V-71899, V-71901 are fixed (details: \
-GNOME screensaver configuration complete).")
+      notify { 'logmsg_gnome_scrsvr':
+        withpath => false,
+        name     => '*** DoD Hardening *** V-71859, V-71861, V-71891, V-71899, V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration complete.]',
+      }
     }
 
   }
@@ -189,7 +203,10 @@ GNOME screensaver configuration complete).")
   }
 
   if $::harden_linux::secure_system::logging {
-    notice('DoD STIG: vulnerability V-71863 fix applied (details: /etc/issue content changed).')
+    notify { 'logmsg_etc_issue':
+      withpath => false,
+      name     => '*** DoD Hardening *** V-71863 vulnerability fix applied. [Details: /etc/issue content changed.]',
+    }
   }
 
 
@@ -202,8 +219,10 @@ GNOME screensaver configuration complete).")
     }
 
     if $::harden_linux::secure_system::logging {
-      notice('DoD STIG: vulnerability V-71897 fixed applied (details: screen package installed).')
-    }
+      notify { 'logmsg_screen_pkg':
+        withpath => false,
+        name     => '*** DoD Hardening *** V-71897 vulnerability fixed applied. [Details: screen package installed.]',
+      }
 
   }
 
@@ -270,9 +289,10 @@ maxclassrepeat = 4
   }
 
   if $::harden_linux::secure_system::logging {
-    notify { '*** DoD Hardening *** V-71903, V-71905, V-71907, V-71909, V-71911,\
-V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf settings updated.]':
+    notify { 'logmsg_pwquality_conf':
       withpath => false,
+      name     => "*** DoD Hardening *** V-71903, V-71905, V-71907, V-71909, V-71911,\
+V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf settings updated.]",
     }
 
   }
