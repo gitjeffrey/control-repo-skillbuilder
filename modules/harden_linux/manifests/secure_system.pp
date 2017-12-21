@@ -361,10 +361,9 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
 
   file_line { '/etc/pam.d/system-auth-ac':
       ensure  => present,
-      match   => '^password\s+sufficient\s+pam_unix\.so',
       replace => true,
       path    => '/etc/pam.d/system-auth-ac',
-      backup  => '.b4.dod',
+      match   => '^password\s+sufficient\s+pam_unix\.so',
       line    => 'password sufficient pam_unix.so sha512 shadow',
   }
 
