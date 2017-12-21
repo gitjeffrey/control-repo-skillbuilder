@@ -324,7 +324,7 @@ maxclassrepeat = 4
     owner   => 'root',
     group   => 'root',
     mode    => '0622',
-    backup  => '.dod',
+    backup  => '.b4.dod',
     content => $pwquality_conf,
   }
 
