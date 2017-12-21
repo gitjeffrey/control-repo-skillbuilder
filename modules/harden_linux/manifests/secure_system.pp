@@ -11,9 +11,13 @@ class harden_linux::secure_system {
 
   if $rpm_system_files != undef {
 
-    $rpm_system_files.each |$index, String $rpm_filename, String $rpm_package| {
+    $rpm_system_files.each |String $rpm_filename, String $rpm_package| {
 
       # Ask rpm package to reset file permissions and owner to match rpm spec...
+      # Logic below will result in repeated calls to an rpm package,
+      # if that package has multiple files with mismatched permissions.
+      # Quicker runtime if this is refactored to run once per package
+      # (unless package manager optimizes these calls already).
       if ($rpm_package != '') {
 
         exec { "rpm --setperms ${rpm_package}":
@@ -25,9 +29,9 @@ class harden_linux::secure_system {
         }
 
         if $::harden_linux::secure_system::logging {
-          notify { "logmsg_file_perm_${index}":
+          notify { "logmsg_file_perm_${rpm_package}_${rpm_filename}":
             withpath => false,
-            name     => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}.]",
+            name     => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]",
           }
         }
 
@@ -52,7 +56,7 @@ class harden_linux::secure_system {
 
   if $rpm_files_check_hash != undef {
 
-    $rpm_files_check_hash.each |$index, String $rpm_filename, String $rpm_package| {
+    $rpm_files_check_hash.each |String $rpm_filename, String $rpm_package| {
 
       if ($rpm_package != '') {
 
@@ -62,9 +66,9 @@ class harden_linux::secure_system {
         }
 
         if $::harden_linux::secure_system::logging {
-          notify { "logmsg_chk_hash_${index}":
+          notify { "logmsg_chk_hash_${rpm_package}_${rpm_filename}":
             withpath => false,
-            name     => "*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}.]",
+            name     => "*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]",
           }
         }
 
