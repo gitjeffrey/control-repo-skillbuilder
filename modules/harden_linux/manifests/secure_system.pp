@@ -11,7 +11,7 @@ class harden_linux::secure_system {
 
   if $rpm_system_files != undef {
 
-    $rpm_system_files.each |String $rpm_filename, String $rpm_package| {
+    $rpm_system_files.each |$index, String $rpm_filename, String $rpm_package| {
 
       # Ask rpm package to reset file permissions and owner to match rpm spec...
       if ($rpm_package != '') {
@@ -25,7 +25,7 @@ class harden_linux::secure_system {
         }
 
         if $::harden_linux::secure_system::logging {
-          notify { 'logmsg_file_perm':
+          notify { "logmsg_file_perm_${index}":
             withpath => false,
             name     => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}.]",
           }
@@ -40,7 +40,7 @@ class harden_linux::secure_system {
     if $::harden_linux::secure_system::logging {
       notify { 'logmsg_file_perm_no_files':
         withpath => false,
-        name     => '*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: no files to process.]',
+        name     => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: no files to process.]'",
       }
     }
 
@@ -62,7 +62,7 @@ class harden_linux::secure_system {
         }
 
         if $::harden_linux::secure_system::logging {
-          notify { 'logmsg_chk_hash':
+          notify { "logmsg_chk_hash_${index}":
             withpath => false,
             name     => "*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: rpm_filename=${rpm_filename}, rpm_packagename=${rpm_package}.]",
           }
