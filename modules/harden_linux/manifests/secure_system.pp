@@ -30,11 +30,11 @@ class harden_linux::secure_system {
 
         if $::harden_linux::secure_system::logging {
 
-          warning("*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]")
+          warning("${facts['fqdn']}: *** DoD Hardening *** V-71849 vulnerability fix applied. [Details: set group/user file permissions: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]")
 
           notify { "logmsg_file_perm_${rpm_package}_${rpm_filename}":
             withpath => false,
-            message  => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]",
+            message  => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: set group/user file permissions: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]",
             loglevel => warning,
           }
 
@@ -48,7 +48,7 @@ class harden_linux::secure_system {
 
     if $::harden_linux::secure_system::logging {
 
-      warning('*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: no files to process.]')
+      warning("${facts['fqdn']}: *** DoD Hardening *** V-71849 vulnerability fix applied. [Details: no files to process.]")
 
       notify { 'logmsg_file_perm_no_files':
         withpath => false,
@@ -77,11 +77,11 @@ class harden_linux::secure_system {
 
         if $::harden_linux::secure_system::logging {
 
-          warning("*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]")
+          warning("${facts['fqdn']}: *** DoD Hardening *** V-71855 vulnerability fix applied. [Details: Fix modified file hash: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]")
 
           notify { "logmsg_chk_hash_${rpm_package}_${rpm_filename}":
             withpath => false,
-            message  => "*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]",
+            message  => "*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: Fix modified file hash: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}]",
             loglevel => warning,
           }
 
@@ -95,7 +95,7 @@ class harden_linux::secure_system {
 
     if $::harden_linux::secure_system::logging {
 
-      warning('*** DoD Hardening *** V-71855 vulnerability fix applied. [Details: no files to process.]')
+      warning("${facts['fqdn']}: *** DoD Hardening *** V-71855 vulnerability fix applied. [Details: no files to process.]")
 
       notify { 'logmsg_no_files_chk_hash':
         withpath => false,
@@ -208,7 +208,7 @@ lock-delay=uint32 5",
 
     if $::harden_linux::secure_system::logging {
 
-      warning('*** DoD Hardening *** V-71859, V-71861, V-71891, V-71899, V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration complete.]')
+      warning("${facts['fqdn']}: *** DoD Hardening *** V-71859, V-71861, V-71891, V-71899, V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration complete.]")
 
       notify { 'logmsg_gnome_scrsvr':
         withpath => false,
@@ -233,7 +233,7 @@ lock-delay=uint32 5",
 
   if $::harden_linux::secure_system::logging {
 
-    warning('*** DoD Hardening *** V-71863 vulnerability fix applied. [Details: /etc/issue content changed.]')
+    warning("${facts['fqdn']}: *** DoD Hardening *** V-71863 vulnerability fix applied. [Details: /etc/issue content changed.]")
 
     notify { 'logmsg_etc_issue':
       withpath => false,
@@ -254,7 +254,7 @@ lock-delay=uint32 5",
 
     if $::harden_linux::secure_system::logging {
 
-      warning('*** DoD Hardening *** V-71897 vulnerability fixed applied. [Details: screen package installed.]')
+      warning("${facts['fqdn']}: *** DoD Hardening *** V-71897 vulnerability fixed applied. [Details: screen package installed.]")
 
       notify { 'logmsg_screen_pkg':
         withpath => false,
@@ -330,7 +330,7 @@ maxclassrepeat = 4
 
   if $::harden_linux::secure_system::logging {
 
-    warning("*** DoD Hardening *** V-71903, V-71905, V-71907, V-71909, V-71911,\
+    warning("${facts['fqdn']}: *** DoD Hardening *** V-71903, V-71905, V-71907, V-71909, V-71911,\
 V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf settings updated.]")
 
     notify { 'logmsg_pwquality_conf':
