@@ -1,10 +1,12 @@
 # Class ::harden_linux::secure_system
 # Harden a system (node) to Department of Defense STIG standards.
 
-class harden_linux::secure_system {
+class harden_linux::secure_system (
+  Boolean $log = false,
+) {
 
   # Turn log messages on/off for this manifest
-  $logging = true
+  $logging = $::harden_linux::secure_system::log
 
   # V-71849
   $rpm_system_files = $facts['dod_rpm_system_files']
