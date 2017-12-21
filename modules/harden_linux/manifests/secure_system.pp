@@ -31,7 +31,8 @@ class harden_linux::secure_system {
         if $::harden_linux::secure_system::logging {
           notify { "logmsg_file_perm_${rpm_package}_${rpm_filename}":
             withpath => false,
-            name     => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]",
+            message  => "*** DoD Hardening *** V-71849 vulnerability fix applied. [Details: rpm_packagename=${rpm_package}, rpm_filename=${rpm_filename}.]",
+            loglevel => alert,
           }
         }
 
