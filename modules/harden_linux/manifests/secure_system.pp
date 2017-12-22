@@ -8,7 +8,9 @@ class harden_linux::secure_system (
   # Turn log messages on/off for this manifest
   $logging = $::harden_linux::secure_system::log
 
+
   # V-71849
+
   $rpm_system_files = $facts['dod_rpm_system_files']
 
   if $rpm_system_files != undef {
@@ -66,6 +68,7 @@ class harden_linux::secure_system (
 
 
   # V-71855
+
   $rpm_files_check_hash = $facts['dod_rpm_files_check_hash']
 
   if $rpm_files_check_hash != undef {
@@ -224,6 +227,7 @@ V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration c
 
 
   # V-71863
+
   file { '/etc/issue':
     ensure  => file,
     owner   => 'root',
@@ -360,12 +364,12 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
   # Research other options like nullok? No, problem means no password.  This was found in default conf...
   # password    sufficient    pam_unix.so md5 shadow nullok try_first_pass use_authtok
 
-  file_line { '/etc/pam.d/system-auth-ac':
+  file_line { '/etc/pam.d/system-auth-ac_encrypt_pwd':
       ensure   => present,
       replace  => true,
       multiple => true,
       path     => '/etc/pam.d/system-auth-ac',
-      match    => '^password\s+sufficient\s+pam_unix\.so',
+      match    => '^(?i)password\s+sufficient\s+pam_unix\.so',
       line     => 'password sufficient pam_unix.so sha512 shadow',
   }
 
@@ -386,12 +390,12 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
 
   # V-71921
 
-  file_line { '/etc/login.defs':
+  file_line { '/etc/login.defs_encrypt_method':
       ensure   => present,
       replace  => true,
       multiple => true,
       path     => '/etc/login.defs',
-      match    => '^ENCRYPT_METHOD\s+',
+      match    => '^(?i)ENCRYPT_METHOD\s+',
       line     => 'ENCRYPT_METHOD SHA512',
   }
 
@@ -400,10 +404,36 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
     warning("${facts['fqdn']}: *** DoD Hardening *** V-71921 vulnerability fix applied. \
 [Details: Set 'ENCRYPT_METHOD SHA512' in /etc/login.defs]")
 
-    notify { 'logmsg_login_defs':
+    notify { 'logmsg_login_defs_encrypt_method':
       withpath => false,
       message  => "*** DoD Hardening *** V-71921 vulnerability fix applied. \
 [Details: Set 'ENCRYPT_METHOD SHA512' in /etc/login.defs]]",
+      loglevel => warning,
+    }
+
+  }
+
+
+  # V-71923
+
+  file_line { '/etc/libuser.conf_crypt_style':
+      ensure   => present,
+      replace  => true,
+      multiple => true,
+      path     => '/etc/libuser.conf',
+      match    => '^(?i)crypt_style\s+=\s+',
+      line     => 'crypt_style = sha512',
+  }
+
+  if $::harden_linux::secure_system::logging {
+
+    warning("${facts['fqdn']}: *** DoD Hardening *** V-71923 vulnerability fix applied. \
+[Details: Set 'crypt_style = sha512' in /etc/libuser.conf]")
+
+    notify { 'logmsg_login_defs_encrypt_method':
+      withpath => false,
+      message  => "*** DoD Hardening *** V-71923 vulnerability fix applied. \
+[Details: Set 'crypt_style = sha512' in /etc/libuser.conf]",
       loglevel => warning,
     }
 
