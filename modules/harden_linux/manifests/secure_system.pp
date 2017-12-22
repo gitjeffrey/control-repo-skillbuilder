@@ -450,7 +450,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
 
 
   # V-71927
-  $userlist_pwdlife = $facts['dod_rpm_system_files']
+  $userlist_pwdlife = $facts['dod_userlist_min_pwd_lifetime']
 
   if $userlist_pwdlife != undef {
 
