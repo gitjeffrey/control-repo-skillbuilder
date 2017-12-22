@@ -454,7 +454,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
 
   if $userlist_pwdlife != undef {
 
-    $userlist_pwdlife.each |Integer $index, String $username| {
+    $userlist_pwdlife.each |String $username| {
 
       # Ask rpm package to reset file permissions and owner to match rpm spec...
       # Logic below will result in repeated calls to an rpm package,
