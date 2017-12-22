@@ -388,7 +388,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
   }
 
 
-  # V-71921
+  # V-71921, V-71925
 
   file_line { '/etc/login.defs_encrypt_method':
       ensure   => present,
@@ -399,15 +399,24 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
       line     => 'ENCRYPT_METHOD SHA512',
   }
 
+  file_line { '/etc/login.defs_passmindays':
+      ensure   => present,
+      replace  => true,
+      multiple => true,
+      path     => '/etc/login.defs',
+      match    => '^(?i)PASS_MIN_DAYS\s+',
+      line     => 'PASS_MIN_DAYS 1',
+  }
+
   if $::harden_linux::secure_system::logging {
 
-    warning("${facts['fqdn']}: *** DoD Hardening *** V-71921 vulnerability fix applied. \
-[Details: Set 'ENCRYPT_METHOD SHA512' in /etc/login.defs]")
+    warning("${facts['fqdn']}: *** DoD Hardening *** V-71921 & V-71925 vulnerability fixes applied. \
+[Details: Set 'ENCRYPT_METHOD SHA512' & 'PASS_MIN_DAYS 1' in /etc/login.defs]")
 
     notify { 'logmsg_login_defs_encrypt_method':
       withpath => false,
-      message  => "*** DoD Hardening *** V-71921 vulnerability fix applied. \
-[Details: Set 'ENCRYPT_METHOD SHA512' in /etc/login.defs]]",
+      message  => "*** DoD Hardening *** V-71921 & V-71925 vulnerability fixes applied. \
+[Details: Set 'ENCRYPT_METHOD SHA512' & 'PASS_MIN_DAYS 1' in /etc/login.defs]",
       loglevel => warning,
     }
 
@@ -430,7 +439,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
     warning("${facts['fqdn']}: *** DoD Hardening *** V-71923 vulnerability fix applied. \
 [Details: Set 'crypt_style = sha512' in /etc/libuser.conf]")
 
-    notify { 'logmsg_login_defs_encrypt_method':
+    notify { 'logmsg_login_defs_crypt_style':
       withpath => false,
       message  => "*** DoD Hardening *** V-71923 vulnerability fix applied. \
 [Details: Set 'crypt_style = sha512' in /etc/libuser.conf]",
@@ -438,5 +447,61 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
     }
 
   }
+
+
+  # V-71927
+  $userlist_pwdlife = $facts['dod_rpm_system_files']
+
+  if $userlist_pwdlife != undef {
+
+    $userlist_pwdlife.each |Integer $index, String $username| {
+
+      # Ask rpm package to reset file permissions and owner to match rpm spec...
+      # Logic below will result in repeated calls to an rpm package,
+      # if that package has multiple files with mismatched permissions.
+      # Quicker runtime if this is refactored to run once per package
+      # (unless package manager optimizes these calls already).
+      if ($username != '') {
+
+        exec { "chage -m 1 ${username}":
+          path => ['/usr/bin', '/usr/sbin'],
+        }
+
+        if $::harden_linux::secure_system::logging {
+
+          warning("${facts['fqdn']}: *** DoD Hardening *** V-71927 vulnerability fix applied. \
+[Details: set user minimum password lifetime = 1 day (or greater) username=${username}]")
+
+          notify { "logmsg_pwd_life_${username}":
+            withpath => false,
+            message  => "*** DoD Hardening *** V-71927 vulnerability fix applied. \
+[Details: set user minimum password lifetime = 1 day (or greater) username=${username}]",
+            loglevel => warning,
+          }
+
+        }
+
+      }
+
+    }
+
+  } else {
+
+    if $::harden_linux::secure_system::logging {
+
+      warning("${facts['fqdn']}: *** DoD Hardening *** V-71927 vulnerability fix applied. \
+[Details: no users violoate minimum password lifetime.]")
+
+      notify { 'logmsg_pwd_life_no_users':
+        withpath => false,
+        message  => '*** DoD Hardening *** V-71927 vulnerability fix applied. [Details: no users violoate minimum password lifetime.]',
+        loglevel => warning,
+      }
+
+    }
+
+  }
+
+
 
 } # class

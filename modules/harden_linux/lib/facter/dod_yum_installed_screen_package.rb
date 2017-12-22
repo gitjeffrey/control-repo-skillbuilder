@@ -1,6 +1,6 @@
 # dod_rpm_system_files.rb
 # V-71849
-# To see a custom fact, run "puppet facts" or "facter -p rpm_system_files"
+# To see a custom fact, run "puppet facts" or "facter -p <fact_name>"
 # Alternative command, rpm instead of yum:
 # rpm -qa | grep screen
 

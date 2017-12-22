@@ -1,6 +1,6 @@
 # dod_rpm_system_files.rb
 # V-71855
-# To see a custom fact, run "puppet facts" or "facter -p rpm_system_files"
+# To see a custom fact, run "puppet facts" or "facter -p <fact_name>"
 
 Facter.add('dod_rpm_files_check_hash') do
   confine :kernel => 'Linux'

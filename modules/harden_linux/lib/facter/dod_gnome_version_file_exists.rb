@@ -1,6 +1,6 @@
 # dod_gnome_version_file.rb
 # V-71849
-# To see a custom fact, run "puppet facts" or "facter -p rpm_system_files"
+# To see a custom fact, run "puppet facts" or "facter -p <fact_name>"
 
 # GNOME 3 version is stored in this file:
 #
