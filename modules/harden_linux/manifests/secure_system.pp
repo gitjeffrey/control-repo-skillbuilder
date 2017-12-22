@@ -357,14 +357,16 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
   # Source:
   # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/chap-hardening_your_system_with_tools_and_services
 
+  # Research other options like nullok? No, problem means no password.  This was found in default conf...
   # password    sufficient    pam_unix.so md5 shadow nullok try_first_pass use_authtok
 
   file_line { '/etc/pam.d/system-auth-ac':
-      ensure  => present,
-      replace => true,
-      path    => '/etc/pam.d/system-auth-ac',
-      match   => '^password\s+sufficient\s+pam_unix\.so',
-      line    => 'password sufficient pam_unix.so sha512 shadow',
+      ensure   => present,
+      replace  => true,
+      multiple => true,
+      path     => '/etc/pam.d/system-auth-ac',
+      match    => '^password\s+sufficient\s+pam_unix\.so',
+      line     => 'password sufficient pam_unix.so sha512 shadow',
   }
 
   if $::harden_linux::secure_system::logging {
@@ -382,4 +384,29 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
   }
 
 
-}
+  # V-71921
+
+  file_line { '/etc/login.defs':
+      ensure   => present,
+      replace  => true,
+      multiple => true,
+      path     => '/etc/login.defs',
+      match    => '^ENCRYPT_METHOD\s+',
+      line     => 'ENCRYPT_METHOD SHA512',
+  }
+
+  if $::harden_linux::secure_system::logging {
+
+    warning("${facts['fqdn']}: *** DoD Hardening *** V-71921 vulnerability fix applied. \
+[Details: Set 'ENCRYPT_METHOD SHA512' in /etc/login.defs]")
+
+    notify { 'logmsg_login_defs':
+      withpath => false,
+      message  => "*** DoD Hardening *** V-71921 vulnerability fix applied. \
+[Details: Set 'ENCRYPT_METHOD SHA512' in /etc/login.defs]]",
+      loglevel => warning,
+    }
+
+  }
+
+} # class
