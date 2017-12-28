@@ -450,17 +450,41 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
 
 
   # V-71927
+
+  # /etc/shadow file info:
+  # As with the passwd file, each field in the shadow file is also separated with ":" colon characters, and are as follows:
+  # 1. Username, up to 8 characters. Case-sensitive, usually all lowercase. A direct match to the username in the /etc/passwd file.
+  # 2. Password, 13 character encrypted. A blank entry (eg. ::) indicates a password is not required to log in (usually a bad idea), and a ``*'' entry (eg. :*:) indicates the account has been disabled.
+  # 3. The number of days (since January 1, 1970) since the password was last changed.
+  # 4. The number of days before password may be changed (0 indicates it may be changed at any time)
+  # 5. The number of days after which password must be changed (99999 indicates user can keep his or her password unchanged for many, many years)
+  # 6. The number of days to warn user of an expiring password (7 for a full week)
+  # 7. The number of days after password expires that account is disabled
+  # 8. The number of days since January 1, 1970 that an account has been disabled
+  # 9. A reserved field for possible future use
+  # Source: http://www.tldp.org/LDP/lame/LAME/linux-admin-made-easy/shadow-file-formats.html
+
+  # Note about identifying "system users".
+  # A lot of this depends on your definition of "log in" -- technically any user who exists in /etc/passwd & /etc/shadow is a "valid user" and could theoretically log in under the right set of circumstances.
+  #
+  # The methods you're talking about fall into the following broad categories:
+  #
+  # Users with "locked" accounts
+  # A user whose password is set to *, !, or some other hash that will never match is "locked out" (in the Sun days the convention was often *LK*, for "Locked").
+  # These users can't log in by typing a password, but they can still log using other authentication mechanisms (SSH keys, for example).
+  #
+  # Users with a "non-interactive" shell
+  # A user whose account has a "non-interactive shell" (/bin/false, /sbin/nologin) can't log in interactively -- i.e. they can't get a shell prompt to run commands at (this also prevents SSH command execution if the user has SSH keys on the system).
+  # These users may still be able to log in to do things like read/send email (via POP/IMAP & SMTP AUTH). Setting a non-interactive shell for users who should never need to use the shell (and for most "service accounts") is generally considered good practice.
+  # So depending on your criteria for "able to log in" you may want to check one or both of these things.
+
+
   $userlist_pwdlife = $facts['dod_userlist_min_pwd_lifetime']
 
   if $userlist_pwdlife != undef {
 
     $userlist_pwdlife.each |String $username| {
 
-      # Ask rpm package to reset file permissions and owner to match rpm spec...
-      # Logic below will result in repeated calls to an rpm package,
-      # if that package has multiple files with mismatched permissions.
-      # Quicker runtime if this is refactored to run once per package
-      # (unless package manager optimizes these calls already).
       if ($username != '') {
 
         exec { "chage -m 1 ${username}":
