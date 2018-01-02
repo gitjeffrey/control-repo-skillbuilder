@@ -388,7 +388,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
   }
 
 
-  # V-71921, V-71925
+  # V-71921, V-71925, V-71929
 
   file_line { '/etc/login.defs_encrypt_method':
       ensure   => present,
@@ -408,15 +408,26 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
       line     => 'PASS_MIN_DAYS 1',
   }
 
+  #TODO: PASS_MAX_DAYS can be less than 60.  If so ignore.
+  #      Right now always sets it to 60 days.
+  file_line { '/etc/login.defs_passmaxdays':
+      ensure   => present,
+      replace  => true,
+      multiple => true,
+      path     => '/etc/login.defs',
+      match    => '^(?i)PASS_MAX_DAYS\s+',
+      line     => 'PASS_MAX_DAYS 60',
+  }
+
   if $::harden_linux::secure_system::logging {
 
-    warning("${facts['fqdn']}: *** DoD Hardening *** V-71921 & V-71925 vulnerability fixes applied. \
+    warning("${facts['fqdn']}: *** DoD Hardening *** V-71921, V-71925 & V-71929 vulnerability fixes applied. \
 [Details: Set 'ENCRYPT_METHOD SHA512' & 'PASS_MIN_DAYS 1' in /etc/login.defs]")
 
     notify { 'logmsg_login_defs_encrypt_method':
       withpath => false,
-      message  => "*** DoD Hardening *** V-71921 & V-71925 vulnerability fixes applied. \
-[Details: Set 'ENCRYPT_METHOD SHA512' & 'PASS_MIN_DAYS 1' in /etc/login.defs]",
+      message  => "*** DoD Hardening *** V-71921, V-71925 & V-71929 vulnerability fixes applied. \
+[Details: Set 'ENCRYPT_METHOD SHA512', 'PASS_MIN_DAYS 1' & 'PASS_MAX_DAYS 60' in /etc/login.defs]",
       loglevel => warning,
     }
 
@@ -526,6 +537,8 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
 
   }
 
+  # V-79931
+  # awk -F: '{if ($5>60 && $2!="*" && $2!="!!" && $2!="!") print $1}' /etc/shadow
 
 
 } # class
