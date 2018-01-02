@@ -6,6 +6,6 @@ Facter.add('dod_pass_max_days') do
   confine :kernel => 'Linux'
   setcode do
     retval = -1
-    retval = Facter::Core::Execution.exec("grep '^PASS_MAX_DAYS' /etc/login.defs | awk -F \"\\t\" '{print $2}'")
+    retval = Facter::Core::Execution.exec("grep -i '^PASS_MAX_DAYS' /etc/login.defs | awk -F \"\\t\" '{print $2}'")
   end
 end
