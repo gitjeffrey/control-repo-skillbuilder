@@ -7,7 +7,7 @@ Facter.add('dod_rpm_files_check_hash') do
   setcode do
     rpm_hash = {}
     rpm_array = []
-    rpm_array = Facter::Core::Execution.exec("rpm -Va | grep '^..5.{8}(?!c)'").split("\n")
+    rpm_array = Facter::Core::Execution.exec("rpm -Va | grep '^..5.{8}(?!c)'").strip.split("\n")
     rpm_array.each do |rpm_filename|
       rpm_hash[rpm_filename] = Facter::Core::Execution.exec("rpm -qf #{rpm_filename}")
     end

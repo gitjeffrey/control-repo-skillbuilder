@@ -7,7 +7,7 @@ Facter.add('dod_userlist_min_pwd_lifetime') do
   setcode do
     user_array = []
     # awk -F: '$4 < 1 {print $1}' /etc/shadow
-    user_array = Facter::Core::Execution.exec("awk -F: '{if ($4<1 && $2!=\"*\" && $2!=\"!!\" && $2!=\"!\") print $1}' /etc/shadow").split("\n")
+    user_array = Facter::Core::Execution.exec("awk -F: '{if ($4<1 && $2!=\"*\" && $2!=\"!!\" && $2!=\"!\") print $1}' /etc/shadow").strip.split("\n")
     user_array
   end
 end
