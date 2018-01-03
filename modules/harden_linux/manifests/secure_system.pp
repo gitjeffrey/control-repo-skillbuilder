@@ -501,11 +501,11 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
   # So depending on your criteria for "able to log in" you may want to check one or both of these things.
 
 
-  $userlist_pwdlife = $facts['dod_pass_min_days_lt_1_users']
+  $userlist_pwdminlife = $facts['dod_pass_min_days_lt_1_users']
 
-  if $userlist_pwdlife != undef {
+  if $userlist_pwdminlife != undef {
 
-    $userlist_pwdlife.each |String $username| {
+    $userlist_pwdminlife.each |String $username| {
 
       if ($username != '') {
 
@@ -518,7 +518,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
           warning("${facts['fqdn']}: *** DoD Hardening *** V-71927 vulnerability fix applied. \
 [Details: set user minimum password lifetime = 1 day (or greater) username=${username}]")
 
-          notify { "logmsg_pwd_life_${username}":
+          notify { "logmsg_pwd_min_life_${username}":
             withpath => false,
             message  => "*** DoD Hardening *** V-71927 vulnerability fix applied. \
 [Details: set user minimum password lifetime = 1 day (or greater) username=${username}]",
@@ -538,7 +538,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
       warning("${facts['fqdn']}: *** DoD Hardening *** V-71927 vulnerability fix applied. \
 [Details: no users violate minimum password lifetime.]")
 
-      notify { 'logmsg_pwd_life_no_users':
+      notify { 'logmsg_pwd_min_life_no_users':
         withpath => false,
         message  => '*** DoD Hardening *** V-71927 vulnerability fix applied. [Details: no users violate minimum password lifetime.]',
         loglevel => warning,
@@ -549,13 +549,14 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
   }
 
 
+
   # V-79931
 
-  $userlist_pwdlife = $facts['dod_pass_max_days_gt_60_users']
+  $userlist_pwdmaxlife = $facts['dod_pass_max_days_gt_60_users']
 
-  if $userlist_pwdlife != undef {
+  if $userlist_pwdmaxlife != undef {
 
-    $userlist_pwdlife.each |String $username| {
+    $userlist_pwdmaxlife.each |String $username| {
 
       if ($username != '') {
 
@@ -568,7 +569,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
           warning("${facts['fqdn']}: *** DoD Hardening *** V-71931 vulnerability fix applied. \
 [Details: set user maximum password lifetime to 60 days (or greater) username=${username}]")
 
-          notify { "logmsg_pwd_life_${username}":
+          notify { "logmsg_pwd_max_life_${username}":
             withpath => false,
             message  => "*** DoD Hardening *** V-71931 vulnerability fix applied. \
 [Details: set user maximum password lifetime to 60 days (or greater) username=${username}]",
@@ -588,7 +589,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
       warning("${facts['fqdn']}: *** DoD Hardening *** V-71931 vulnerability fix applied. \
 [Details: no users violate the maximum password lifetime.]")
 
-      notify { 'logmsg_pwd_life_no_users':
+      notify { 'logmsg_pwd_max_life_no_users':
         withpath => false,
         message  => '*** DoD Hardening *** V-71931 vulnerability fix applied. [Details: no users violate the maximum password lifetime.]',
         loglevel => warning,
