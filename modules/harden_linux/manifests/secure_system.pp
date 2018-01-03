@@ -9,6 +9,7 @@ class harden_linux::secure_system (
   $logging = $::harden_linux::secure_system::log
 
 
+
   # V-71849
 
   $rpm_system_files = $facts['dod_rpm_system_files']
@@ -67,6 +68,7 @@ class harden_linux::secure_system (
   }
 
 
+
   # V-71855
 
   $rpm_files_check_hash = $facts['dod_rpm_files_check_hash']
@@ -117,6 +119,7 @@ class harden_linux::secure_system (
   }
 
 
+
   # V-71859, V-71861, V-71891, V-71893, V-71895, V-71899, V-71901
   #
   # Sources:
@@ -156,7 +159,7 @@ work product are private and confidential. See User Agreement for details. \n"
       ensure  => file,
       owner   => 'root',
       group   => 'root',
-      mode    => '0622',
+      mode    => '0644',
       backup  => '.b4.dod',
       content => "user-db:user
 system-db:local
@@ -226,6 +229,7 @@ V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration c
   }
 
 
+
   # V-71863
 
   file { '/etc/issue':
@@ -250,7 +254,9 @@ V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration c
   }
 
 
+
   # V-71897
+
   if (!$facts['dod_yum_installed_screen_package']) {
 
     # Added the -y option to answer yes to any prompts, else it fails.
@@ -271,6 +277,7 @@ V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration c
     }
 
   }
+
 
 
   # V-71903, V-71905, V-71907, V-71909, V-71911, V-71913, V-71915, V-71917
@@ -330,7 +337,7 @@ maxclassrepeat = 4
     ensure  => file,
     owner   => 'root',
     group   => 'root',
-    mode    => '0622',
+    mode    => '0644',
     backup  => '.b4.dod',
     content => $pwquality_conf,
   }
@@ -348,6 +355,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
     }
 
   }
+
 
 
   # V-71919
@@ -386,6 +394,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
     }
 
   }
+
 
 
   # V-71921, V-71925, V-71929
@@ -434,6 +443,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
   }
 
 
+
   # V-71923
 
   file_line { '/etc/libuser.conf_crypt_style':
@@ -458,6 +468,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
     }
 
   }
+
 
 
   # V-71927
@@ -490,7 +501,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
   # So depending on your criteria for "able to log in" you may want to check one or both of these things.
 
 
-  $userlist_pwdlife = $facts['dod_userlist_min_pwd_lifetime']
+  $userlist_pwdlife = $facts['dod_pass_min_days_lt_1_users']
 
   if $userlist_pwdlife != undef {
 
@@ -525,11 +536,11 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
     if $::harden_linux::secure_system::logging {
 
       warning("${facts['fqdn']}: *** DoD Hardening *** V-71927 vulnerability fix applied. \
-[Details: no users violoate minimum password lifetime.]")
+[Details: no users violate minimum password lifetime.]")
 
       notify { 'logmsg_pwd_life_no_users':
         withpath => false,
-        message  => '*** DoD Hardening *** V-71927 vulnerability fix applied. [Details: no users violoate minimum password lifetime.]',
+        message  => '*** DoD Hardening *** V-71927 vulnerability fix applied. [Details: no users violate minimum password lifetime.]',
         loglevel => warning,
       }
 
@@ -537,8 +548,59 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
 
   }
 
+
   # V-79931
-  # awk -F: '{if ($5>60 && $2!="*" && $2!="!!" && $2!="!") print $1}' /etc/shadow
+
+  $userlist_pwdlife = $facts['dod_pass_max_days_gt_60_users']
+
+  if $userlist_pwdlife != undef {
+
+    $userlist_pwdlife.each |String $username| {
+
+      if ($username != '') {
+
+        exec { "chage -M 60 ${username}":
+          path => ['/usr/bin', '/usr/sbin'],
+        }
+
+        if $::harden_linux::secure_system::logging {
+
+          warning("${facts['fqdn']}: *** DoD Hardening *** V-71931 vulnerability fix applied. \
+[Details: set user maximum password lifetime to 60 days (or greater) username=${username}]")
+
+          notify { "logmsg_pwd_life_${username}":
+            withpath => false,
+            message  => "*** DoD Hardening *** V-71931 vulnerability fix applied. \
+[Details: set user maximum password lifetime to 60 days (or greater) username=${username}]",
+            loglevel => warning,
+          }
+
+        }
+
+      }
+
+    }
+
+  } else {
+
+    if $::harden_linux::secure_system::logging {
+
+      warning("${facts['fqdn']}: *** DoD Hardening *** V-71931 vulnerability fix applied. \
+[Details: no users violate the maximum password lifetime.]")
+
+      notify { 'logmsg_pwd_life_no_users':
+        withpath => false,
+        message  => '*** DoD Hardening *** V-71931 vulnerability fix applied. [Details: no users violate the maximum password lifetime.]',
+        loglevel => warning,
+      }
+
+    }
+
+  }
+
+
+
+
 
 
 } # class
