@@ -6,7 +6,7 @@
 
 Facter.add('dod_pass_reuse_generations') do
   confine :kernel => 'Linux'
-  retval = Facter::Core::Execution.exec("egrep '^password\s+requisite\s+pam_pwquality.so' /etc/pam.d/system-auth-ac | egrep -o 'retry[\s]*=[\s]*.' | awk -F= '{print $2}'").to_i
+  retval = Facter::Core::Execution.exec("egrep '^password\s+sufficient\s+pam_unix.so' /etc/pam.d/system-auth-ac | egrep -o 'remember[\s]*=[\s]*.' | awk -F= '{print $2}'").to_i
   setcode do
     if retval!=nil
       retval
