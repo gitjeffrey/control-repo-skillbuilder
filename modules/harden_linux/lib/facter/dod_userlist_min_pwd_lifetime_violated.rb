@@ -10,7 +10,8 @@ Facter.add('dod_userlist_min_pwd_lifetime') do
     if (user_string.empty?)
       user_array = []
     else
-      user_array = user_string.split("\n")
+      user_array = []
+      #user_array = user_string.split("\n")
     end
     user_array
   end
