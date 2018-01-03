@@ -232,7 +232,7 @@ V-71901 vulnerability fixes applied. [Details: GNOME screensaver configuration c
     ensure  => file,
     owner   => 'root',
     group   => 'root',
-    mode    => '0622',
+    mode    => '0644',
     backup  => '.b4.dod',
     content => $banner_msg,
   }
@@ -408,26 +408,26 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
       line     => 'PASS_MIN_DAYS 1',
   }
 
-  #TODO: PASS_MAX_DAYS can be less than 60.  If so ignore.
-  #      Right now always sets it to 60 days.
-  file_line { '/etc/login.defs_passmaxdays':
-      ensure   => present,
-      replace  => true,
-      multiple => true,
-      path     => '/etc/login.defs',
-      match    => '^(?i)PASS_MAX_DAYS\s+',
-      line     => 'PASS_MAX_DAYS 60',
+  if $facts['dod_pass_max_days'] > 60 {
+    file_line { '/etc/login.defs_passmaxdays':
+        ensure   => present,
+        replace  => true,
+        multiple => true,
+        path     => '/etc/login.defs',
+        match    => '^(?i)PASS_MAX_DAYS\s+',
+        line     => 'PASS_MAX_DAYS 60',
+    }
   }
 
   if $::harden_linux::secure_system::logging {
 
     warning("${facts['fqdn']}: *** DoD Hardening *** V-71921, V-71925 & V-71929 vulnerability fixes applied. \
-[Details: Set 'ENCRYPT_METHOD SHA512' & 'PASS_MIN_DAYS 1' in /etc/login.defs]")
+[Details: Set 'ENCRYPT_METHOD SHA512', 'PASS_MIN_DAYS' & 'PASS_MAX_DAYS'  in /etc/login.defs]")
 
     notify { 'logmsg_login_defs_encrypt_method':
       withpath => false,
       message  => "*** DoD Hardening *** V-71921, V-71925 & V-71929 vulnerability fixes applied. \
-[Details: Set 'ENCRYPT_METHOD SHA512', 'PASS_MIN_DAYS 1' & 'PASS_MAX_DAYS 60' in /etc/login.defs]",
+[Details: Set 'ENCRYPT_METHOD SHA512', 'PASS_MIN_DAYS' & 'PASS_MAX_DAYS' in /etc/login.defs]",
       loglevel => warning,
     }
 
