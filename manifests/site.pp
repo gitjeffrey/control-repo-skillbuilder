@@ -29,7 +29,7 @@ node default {
   # Example:
   #   class { 'my_class': }
   if $facts['kernel'] == 'Linux' {
-    class { 'ntp':
+    class { '::ntp':
       servers => [ 'time.nist.gov' ],
     }
   }

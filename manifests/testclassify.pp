@@ -1,5 +1,5 @@
 class testclassify {
 
-  class { 'testclass': }
+  class { '::testclass': }
 
 }

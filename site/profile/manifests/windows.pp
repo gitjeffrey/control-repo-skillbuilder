@@ -24,11 +24,11 @@ class profile::windows (
     group  => 'wingrp',
   }
 
-  class { 'archive':
+  class { '::archive':
     seven_zip_name     => '7-Zip (x64 edition)',
     seven_zip_source   => 'http://www.7-zip.org/a/7z1701-x64.msi',
     seven_zip_provider => 'windows',
-    notify             => Reboot['after']
+    notify             => Reboot['after'],
   }
   -> reboot { 'after': }
 
