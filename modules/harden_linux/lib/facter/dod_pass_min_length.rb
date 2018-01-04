@@ -6,8 +6,10 @@
 
 Facter.add('dod_pass_min_length') do
   confine :kernel => 'Linux'
-  retval = Facter::Core::Execution.exec("egrep -o '^(?i)\s*minlen\s*=\s*[0-9]+' /etc/security/pwquality.conf | awk -F= '{print $2}'").strip.to_i
+  retval = Facter::Core::Execution.exec("egrep -o '^(?i)\s*minlen\s*=\s*[0-9]+' /etc/security/pwquality.conf | awk -F= '{print $2}'").strip
   setcode do
-    retval
+    if retval != ''
+      retval.to_i
+    end
   end
 end
