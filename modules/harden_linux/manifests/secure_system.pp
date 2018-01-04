@@ -601,6 +601,37 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
 
 
 
+  # V-79933
+  # password sufficient pam_unix.so use_authtok sha512 shadow remember=5
+
+  $remember = $facts['dod_pass_reuse_generations']
+
+  if $remember < 5 {
+
+    file_line { '/etc/pam.d/system-auth-ac_remember':
+        ensure   => present,
+        replace  => true,
+        multiple => true,
+        path     => '/etc/pam.d/system-auth-ac',
+        match    => '^(?i)password\s+sufficient\s+pam_unix.so\s+',
+        line     => 'password sufficient pam_unix.so use_authtok sha512 shadow remember=5',
+    }
+
+      if $::harden_linux::secure_system::logging {
+
+        warning("${facts['fqdn']}: *** DoD Hardening *** V-79933 vulnerability fix applied. \
+[Details: Set password reuse restrictions, adding 'remember=5' in /etc/pamd.d/system-auth-ac]")
+
+        notify { 'logmsg_system_auth_ac_remember':
+          withpath => false,
+          message  => "*** DoD Hardening *** V-79933 vulnerability fix applied. \
+[Details: Set password reuse restrictions, adding 'remember=5' in /etc/pamd.d/system-auth-ac]",
+          loglevel => warning,
+        }
+
+      }
+
+    }
 
 
 
