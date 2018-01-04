@@ -10,6 +10,8 @@ Facter.add('dod_pass_min_length') do
   setcode do
     if retval != ''
       retval.to_i
+    else
+      retval
     end
   end
 end
