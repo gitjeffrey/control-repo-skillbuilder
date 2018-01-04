@@ -1,6 +1,5 @@
 mod 'dod_harden_redhat',
     :git => 'https://github.com/autostructure/dod_harden_redhat.git'
-mod 'site_data', :latest
 mod 'puppetlabs-stdlib', :latest
 mod 'puppetlabs-concat', :latest
 mod 'puppetlabs-apache', :latest
