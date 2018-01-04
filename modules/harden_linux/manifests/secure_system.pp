@@ -606,7 +606,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
 
   $remember = $facts['dod_pass_reuse_generations']
 
-  if $remember < 5 {
+  if $remember != '' and $remember < 5 {
 
     file_line { '/etc/pam.d/system-auth-ac_remember':
         ensure   => present,
@@ -614,7 +614,7 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
         multiple => true,
         path     => '/etc/pam.d/system-auth-ac',
         match    => '^(?i)password\s+sufficient\s+pam_unix.so\s+',
-        line     => 'password sufficient pam_unix.so use_authtok sha512 shadow remember=5',
+        line     => 'password\tsufficient\tpam_unix.so use_authtok sha512 shadow remember=5',
     }
 
       if $::harden_linux::secure_system::logging {
@@ -632,6 +632,40 @@ V-71913, V-71915, V-71917 vulnerability fixes applied. [Details: pwquality.conf 
       }
 
     }
+
+
+
+    # V-71935
+    # password sufficient pam_unix.so use_authtok sha512 shadow remember=5
+
+    $pass_min_length = $facts['dod_pass_min_length']
+
+    if $pass_min_length != '' and $pass_min_length < 15 {
+
+      file_line { '/etc/security/pwquality.conf_minlen':
+          ensure   => present,
+          replace  => true,
+          multiple => true,
+          path     => '/etc/security/pwquality.conf',
+          match    => '^(?i)\s*minlen\s*=\s*[0-9]+',
+          line     => 'minlen = 15',
+      }
+
+        if $::harden_linux::secure_system::logging {
+
+          warning("${facts['fqdn']}: *** DoD Hardening *** V-71935 vulnerability fix applied. \
+  [Details: Set password minimum password length, 'minlen = 5' in /etc/security/pwquality.conf]")
+
+          notify { 'logmsg_system_auth_ac_remember':
+            withpath => false,
+            message  => "*** DoD Hardening *** V-71935 vulnerability fix applied. \
+  [Details: Set password minimum password length, 'minlen = 5' in /etc/security/pwquality.conf]",
+            loglevel => warning,
+          }
+
+        }
+
+      }
 
 
 
