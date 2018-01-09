@@ -10,4 +10,5 @@ mod 'puppetlabs-iis', :latest
 mod 'puppetlabs-windows', :latest
 mod 'puppetlabs-reboot', :latest
 mod 'puppetlabs-ntp', :latest
-#    :git => 'https://github.com/autostructure/dod_harden_redhat.git'
+mod 'simp-simplib', '3.8.0'
+mod 'simp-useradd', '0.2.0'
