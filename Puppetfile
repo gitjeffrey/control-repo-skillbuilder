@@ -12,3 +12,6 @@ mod 'puppetlabs-reboot', :latest
 mod 'puppetlabs-ntp', :latest
 mod 'simp-simplib', '3.8.0'
 mod 'simp-useradd', '0.2.0'
+mod 'simp-pam', :latest
+mod 'simp-oddjob', :latest
+mod 'simp-simpcat', :latest
