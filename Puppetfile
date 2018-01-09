@@ -1,3 +1,5 @@
+forge 'http://forge.puppetlabs.com'
+
 mod 'dod_harden_redhat',
     :git => 'git@github.com:autostructure/dod_harden_redhat.git'
 mod 'puppetlabs-stdlib', :latest
