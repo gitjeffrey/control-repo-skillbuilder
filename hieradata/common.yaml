@@ -1,3 +1,0 @@
----
-profile::hiera_test::ssl: true
-#dod_harden_redhat::secure_system::log: true
