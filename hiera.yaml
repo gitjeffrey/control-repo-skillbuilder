@@ -13,9 +13,9 @@ hierarchy:
   - name: "Node-level by domain"
     path: "domains/%{facts.domain}"
   - name: "OS family"
-    path: %{facts.os.family}"
+    path: "%{facts.os.family}"
   - name: "OS release (full)"
-    path: %{facts.os.name}/%{facts.os.release.full}
+    path: "%{facts.os.name}/%{facts.os.release.full}"
   - name: "OS release (major)"
     path: "%{facts.os.name}/%{facts.os.release.major}"
   - name: "OS"
