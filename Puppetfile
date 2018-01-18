@@ -1,37 +1,3 @@
-moduledir 'src'
-
-mod 'simp-doc',
-  :git => 'https://github.com/simp/simp-doc',
-  :ref => '79c18f732f6c73b8bff21809c639771a892722f2'
-
-mod 'simp-rsync',
-  :git => 'https://github.com/simp/simp-rsync',
-  :ref => 'd03a15bfbdb7fd756b71e3e8e10b2fc7bbaa9f31'
-
-moduledir 'src/assets'
-
-mod 'simp-adapter',
-  :git => 'https://github.com/simp/simp-adapter',
-  :ref => '6d8208fb618bdb4e05e7696a76686bb8010dc6a1'
-
-mod 'simp-environment',
-  :git => 'https://github.com/simp/simp-environment-skeleton',
-  :ref => '733d59986c7fd1cd87dcbc56a04ac82a0f5f2d30'
-
-mod 'simp-gpgkeys',
-  :git => 'https://github.com/simp/simp-gpgkeys',
-  :ref => '0cb94266ee5f02822cf6ed99df6d2597f39a26e6'
-
-mod 'simp-utils',
-  :git => 'https://github.com/simp/simp-utils',
-  :ref => '1828ea0d02f6c8a3277cffb0bbddc272afa9c93f'
-
-moduledir 'src/rubygems'
-
-mod 'rubygem-simp_cli',
-  :git => 'https://github.com/simp/rubygem-simp-cli',
-  :ref => '7e724639c8e036d651ec81d59ec67417c3c52eb9'
-
 moduledir 'src/puppet/modules'
 
 mod 'bfraser-grafana',
