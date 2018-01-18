@@ -1,23 +1,26 @@
 ---
-:version: 5
+# This is the default hiera.yaml file
+# Feel free to modify the hierarchy to suit your needs but please
+# leave the simp* entries in place at the bottom of the list
 :backends:
-  - yaml
-:defaults:
-  :datadir: "hieradata"
-:yaml:
-  :datadir: "hieradata"
+  - 'yaml'
+  - 'json'
 :hierarchy:
-  - "nodes/%{trusted.certname}"  # File path, relative to datadir.
-  - "hosts/%{trusted.certname}"
-  - "hosts/%{facts.fqdn}"
-  - "hosts/%{facts.hostname}"
-  - "domains/%{facts.domain}"
-  - "%{facts.os.family}"
-  - "%{facts.os.name}/%{facts.os.release.full}"
-  - "%{facts.os.name}/%{facts.os.release.major}"
-  - "%{facts.os.name}"
-  - "hostgroups/%{::hostgroup}"
-  - "default"
-  - "compliance_profiles/%{::compliance_profile}"
-  - "hsimp_config_settings"
-  - "scenarios/%{::simp_scenario}"
+  - 'hosts/%{trusted.certname}'
+  - 'hosts/%{facts.fqdn}'
+  - 'hosts/%{facts.hostname}'
+  - 'domains/%{facts.domain}'
+  - '%{facts.os.family}'
+  - '%{facts.os.name}/%{facts.os.release.full}'
+  - '%{facts.os.name}/%{facts.os.release.major}'
+  - '%{facts.os.name}'
+  - 'hostgroups/%{::hostgroup}'
+  - 'default'
+  - 'compliance_profiles/%{::compliance_profile}'
+  - 'simp_config_settings'
+  - 'scenarios/%{::simp_scenario}'
+:logger: 'puppet'
+:yaml:
+  :datadir: 'hieradata'
+:json:
+  :datadir: 'hieradata'
