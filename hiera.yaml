@@ -1,34 +1,23 @@
 ---
-version: 5
-backends: yaml
-defaults:
-  datadir: "hieradata"
-hierarchy:
-  - name: "Per-node data"                   # Human-readable name.
-    path: "nodes/%{trusted.certname}.yaml"  # File path, relative to datadir. IMPORTANT: include the file extension!
-  - name: "SIMP values per node"
-    path: "hosts/%{trusted.certname}.yaml"
-  - name: "SIMP values by fqdn"
-    path: "hosts/%{facts.fqdn}.yaml"
-  - name: "SIMP values by hostname"
-    path: "hosts/%{facts.hostname}.yaml"
-  - name: "SIMP values by domain"
-    path: "domains/%{facts.domain}.yaml"
-  - name: "SIMP values by os family"
-    path: "%{facts.os.family}.yaml"
-  - name: "SIMP values by os full release ver"
-    path: "%{facts.os.name}/%{facts.os.release.full}.yaml"
-  - name: "SIMP values by os major release ver"
-    path: "%{facts.os.name}/%{facts.os.release.major}.yaml"
-  - name: "SIMP values by os name"
-    path: "%{facts.os.name}.yaml"
-  - name: "SIMP values by hostgroup"
-    path: "hostgroups/%{::hostgroup}.yaml"
-  - name: "Default SIMP values"
-    path: "default.yaml"
-  - name: "SIMP values by compliance profile"
-    path: "compliance_profiles/%{::compliance_profile}.yaml"
-  - name: "SIMP values by conig settings"
-    path: "hsimp_config_settings.yaml"
-  - name: "SIMP values by simp scenario"
-    path: "scenarios/%{::simp_scenario}.yaml"
+:version: 5
+:backends:
+  - yaml
+:defaults:
+  :datadir: "hieradata"
+:yaml:
+  :datadir: "hieradata"
+:hierarchy:
+  - "nodes/%{trusted.certname}"  # File path, relative to datadir.
+  - "hosts/%{trusted.certname}"
+  - "hosts/%{facts.fqdn}"
+  - "hosts/%{facts.hostname}"
+  - "domains/%{facts.domain}"
+  - "%{facts.os.family}"
+  - "%{facts.os.name}/%{facts.os.release.full}"
+  - "%{facts.os.name}/%{facts.os.release.major}"
+  - "%{facts.os.name}"
+  - "hostgroups/%{::hostgroup}"
+  - "default"
+  - "compliance_profiles/%{::compliance_profile}"
+  - "hsimp_config_settings"
+  - "scenarios/%{::simp_scenario}"
