@@ -11,5 +11,8 @@ simp_options::stunnel: true
 simp_options::syslog: true
 simp_options::tcpwrappers: false
 
+simp_options::server: puppet
+simp_options::ca: puppet
+
 classes:
   - 'simp::simp'
