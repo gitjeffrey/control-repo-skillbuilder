@@ -89,7 +89,7 @@ notify { 'testmessage1':
 
 # Required if you want the SIMP global catalysts
 # Defaults should technically be sane in all modules without this
-include '::simp_options'
+#include '::simp_options'
 # Include the SIMP base controller with the preferred scenario
 include '::simp'
 
