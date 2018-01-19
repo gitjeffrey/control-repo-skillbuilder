@@ -77,6 +77,16 @@ $compliance_profile = 'nist_800_53_rev4'
 #
 $hostgroup = 'default'
 
+$testvalue = $::simp_options::puppet::server
+
+warning("${facts['fqdn']}: *** SIMP Open Source *** Test message. [Details: ${testvalue}.]")
+
+notify { 'testmessage1':
+  withpath => false,
+  message  => "*** SIMP Open Source *** Test message. [Details: ${testvalue}.]",
+  loglevel => warning,
+}
+
 # Required if you want the SIMP global catalysts
 # Defaults should technically be sane in all modules without this
 include '::simp_options'
